@@ -1,5 +1,6 @@
 package cn.com.yafo.yafopda.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,7 +21,7 @@ public class OrdersAdapter  extends BaseAdapter {
 
     private List<SnOrderVM> data;
 
-    private Context context;
+    public Context context;
 
     // 添加Loading cancle()是按返回键，Loading框关闭的回调，可以做取消加载请求的操作。
     public Loading mLoading ;

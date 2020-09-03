@@ -1,13 +1,12 @@
 package cn.com.yafo.yafopda.vm
 
+import android.app.AlertDialog
 import android.os.Handler
 import android.os.Message
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import cn.com.yafo.yafopda.Adapter.OrdersAdapter
 import cn.com.yafo.yafopda.helper.CrashHandler.TAG
-import cn.com.yafo.yafopda.helper.Loading
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
@@ -25,7 +24,6 @@ class SNFragmentVM ( ) : ViewModel(){
             val request = Request.Builder().get()
                 .url("http://193.111.99.63/api/PDA/GetBill?billcode=CR2007160034")
                 .build()
-
 
             //代理 notifyDataSetChanged事件，okhttp 不能在子线程直接调用
             val handler : Handler = object : Handler(){
@@ -56,7 +54,19 @@ class SNFragmentVM ( ) : ViewModel(){
                     }
                     else
                     {
-                        //  Toast.makeText("","位置提交失败",Toast.LENGTH_SHORT).show()
+
+                        // 1、创建简单的AlertDialog
+                        val dialog = AlertDialog.Builder(ad.context)
+
+                        // (2)设置各种属性 // 注：不设置哪项属性，这个属性就默认不会显示出来
+                        dialog.setTitle("错误")
+                        dialog.setMessage("代码："+ response.code() + " 内容："+ response.body().string())
+
+                        // (3)设置dialog可否被取消
+                        dialog.setCancelable(true)
+
+                        // (4)显示出来
+                        dialog.show()
 
                         //处理错误
                         Log.d(TAG, "OnResponse: " + response.body()?.string())

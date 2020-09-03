@@ -42,9 +42,6 @@ class MainActivity : AppCompatActivity() {
         // 关闭Loading
         mLoading.dismiss();
 
-
-
-
         setContentView(R.layout.main_activity)
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java] // 关键代码
