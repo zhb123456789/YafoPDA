@@ -1,0 +1,2 @@
+rootProject.name='YafoPDA'
+include ':app'

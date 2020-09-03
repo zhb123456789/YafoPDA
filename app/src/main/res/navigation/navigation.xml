@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="cn.com.yafo.yafopda.MainFragment"
+        android:label="main_fragment"
+        tools:layout="@layout/main_fragment" >
+        <action
+            android:id="@+id/action_main_to_SN"
+            app:destination="@id/SNFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/SNFragment"
+        android:name="cn.com.yafo.yafopda.sn_fragment"
+        android:label="sn_fragment"
+        tools:layout="@layout/sn_fragment" >
+        <action
+            android:id="@+id/action_SNFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_SNFragment_to_sn_order_info_fragment"
+            app:destination="@id/sn_order_info_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sn_order_info_fragment"
+        android:name="cn.com.yafo.yafopda.sn_order_info_fragment"
+        android:label="sn_order_info_fragment"
+        tools:layout="@layout/sn_order_info_fragment" >
+        <action
+            android:id="@+id/action_sn_order_info_fragment_to_SNFragment"
+            app:destination="@id/SNFragment" />
+    </fragment>
+
+</navigation>
