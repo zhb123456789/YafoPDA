@@ -19,8 +19,6 @@ class SNFragmentVM ( ) : ViewModel(){
     //var orderList : MutableLiveData<MutableList<OrderVM>> = MutableLiveData()
     fun addOrder(orCode: String,ad : OrdersAdapter) {
         val order =SnOrderVM()
-
-
         ad.LoadingShow()
         try {
             val client = OkHttpClient()
