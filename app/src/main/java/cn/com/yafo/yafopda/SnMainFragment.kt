@@ -10,17 +10,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.ListView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import cn.com.yafo.yafopda.Adapter.OrdersAdapter
-import cn.com.yafo.yafopda.databinding.SnFragmentBinding
+import cn.com.yafo.yafopda.Adapter.SnMainAdapter
+import cn.com.yafo.yafopda.databinding.SnMainFragmentBinding
 import cn.com.yafo.yafopda.vm.SnOrderVM
-import cn.com.yafo.yafopda.vm.SNFragmentVM
+import cn.com.yafo.yafopda.vm.SnMainFragmentVM
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -34,13 +32,13 @@ private const val ARG_PARAM2 = "param2"
  * Use the [SNFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class sn_fragment : Fragment() {
+class SnMainFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     var list : MutableList <SnOrderVM> =mutableListOf()
-    var vm:SNFragmentVM = SNFragmentVM()
-    lateinit var adapter: OrdersAdapter
+    var vm:SnMainFragmentVM = SnMainFragmentVM()
+    lateinit var adapter: SnMainAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,16 +54,16 @@ class sn_fragment : Fragment() {
         // Inflate the layout for this fragment
         //var viewModel = ViewModelProvider(this.requireActivity()).get(MainViewModel::class.java) // 关键代码
 
-        vm=ViewModelProvider(this.requireActivity()).get(SNFragmentVM::class.java) // 关键代码
+        vm=ViewModelProvider(this.requireActivity()).get(SnMainFragmentVM::class.java) // 关键代码
 
-        var mBinding: SnFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.sn_fragment,container,false)
+        var mBinding: SnMainFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.sn_main_fragment,container,false)
         mBinding.vm=vm
         mBinding.lifecycleOwner=this.requireActivity()
 
 
 
 //定制Adapter 绑定List
-        adapter = OrdersAdapter( vm.orderList, context)
+        adapter = SnMainAdapter( vm.orderList, context)
         mBinding.adapter=adapter
 
 //绑定List 结束
@@ -82,7 +80,7 @@ class sn_fragment : Fragment() {
         //返回按钮
         mBinding.button.setOnClickListener(View.OnClickListener { v ->
             val controller = Navigation.findNavController(v)
-            controller.navigate(R.id.action_SNFragment_to_mainFragment)
+            controller.navigate(R.id.action_snMainFragment_to_mainFragment)
         })
         //加号按钮
         mBinding.btnAddOrder.setOnClickListener(View.OnClickListener {
@@ -140,7 +138,7 @@ class sn_fragment : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            sn_fragment().apply {
+            SnMainFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

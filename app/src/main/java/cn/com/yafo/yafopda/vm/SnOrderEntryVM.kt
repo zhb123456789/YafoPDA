@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 
-class SnOrderDetailVM  {
+class SnOrderEntryVM  {
     var invcode= MutableLiveData<String>()
     var invname= MutableLiveData<String>()
     var invclass= MutableLiveData<String>()

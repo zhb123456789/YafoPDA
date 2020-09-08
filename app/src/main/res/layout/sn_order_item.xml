@@ -5,7 +5,7 @@
     <data>
         <variable
             name="orderitem"
-            type="cn.com.yafo.yafopda.vm.SnOrderDetailVM"/>
+            type="cn.com.yafo.yafopda.vm.SnOrderEntryVM"/>
     </data>
 
     <RelativeLayout
@@ -23,6 +23,7 @@
 
         <Button
             android:id="@+id/button4"
+            style="@style/Widget.AppCompat.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"

@@ -16,7 +16,7 @@ import java.util.List;
 
 import cn.com.yafo.yafopda.BR;
 import cn.com.yafo.yafopda.R;
-import cn.com.yafo.yafopda.databinding.SnItemBinding;
+import cn.com.yafo.yafopda.databinding.SnMainItemBinding;
 import cn.com.yafo.yafopda.vm.SnOrderVM;
 
 public class ListAdapter<T>  extends BaseAdapter {
@@ -81,7 +81,7 @@ public class ListAdapter<T>  extends BaseAdapter {
             try {
                 Bundle bundle = new Bundle();
                 bundle.putInt("position", position);
-                Navigation.findNavController(view).navigate(R.id.action_SNFragment_to_sn_order_info_fragment, bundle);
+                Navigation.findNavController(view).navigate(R.id.action_snMainFragment_to_snOrderFragment, bundle);
 
                // Toast.makeText(context,position, Toast.LENGTH_LONG).show();
                 notifyDataSetChanged();//刷新数据

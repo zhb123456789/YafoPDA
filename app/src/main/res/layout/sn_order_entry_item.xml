@@ -5,7 +5,7 @@
     <data>
         <variable
             name="orderitem"
-            type="cn.com.yafo.yafopda.vm.SnOrderDetailVM"/>
+            type="cn.com.yafo.yafopda.vm.SnOrderEntryVM"/>
     </data>
 
     <RelativeLayout
@@ -28,6 +28,12 @@
             android:text="@{orderitem.invname}"
             android:textColor="@android:color/black"
             android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sn_order_detail_item" />
 
     </RelativeLayout>
 </layout>

@@ -1,12 +1,10 @@
 package cn.com.yafo.yafopda
 
-import android.app.ProgressDialog.show
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Message
 import android.os.PersistableBundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import cn.com.yafo.yafopda.helper.CrashHandler
 import cn.com.yafo.yafopda.helper.Loading
 import cn.com.yafo.yafopda.vm.MainViewModel
-import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
@@ -80,7 +77,7 @@ class MainActivity : AppCompatActivity() {
             val bundle = Bundle()
             bundle.putString("name", "TeaOf")
         supportFragmentManager.beginTransaction()
-            .replace(R.id.container, sn_fragment.newInstance("1","2"))
+            .replace(R.id.container, SnMainFragment.newInstance("1","2"))
             .addToBackStack("").commit()
         }
 

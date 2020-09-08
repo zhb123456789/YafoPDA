@@ -5,24 +5,25 @@ import android.os.Handler
 import android.os.Message
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import cn.com.yafo.yafopda.Adapter.OrdersAdapter
+import cn.com.yafo.yafopda.Adapter.SnMainAdapter
 import cn.com.yafo.yafopda.helper.CrashHandler.TAG
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
 
 
-class SNFragmentVM ( ) : ViewModel(){
+class SnMainFragmentVM ( ) : ViewModel(){
     private val client = OkHttpClient()
     var orderList : MutableList <SnOrderVM> =mutableListOf()
     //var orderList : MutableLiveData<MutableList<OrderVM>> = MutableLiveData()
-    fun addOrder(orCode: String,ad : OrdersAdapter) {
+    //var orderList : MutableLiveData<List<OrderVM>>= MutableLiveData()
+    fun addOrder(orCode: String,ad : SnMainAdapter) {
         val order =SnOrderVM()
         ad.LoadingShow()
         try {
             val client = OkHttpClient()
             val request = Request.Builder().get()
-                .url("http://193.111.99.63/api/PDA/GetBill?billcode=CR2007160034")
+                .url("http://193.111.99.63/api/PDA/GetBill?billcode=$orCode")
                 .build()
 
             //代理 notifyDataSetChanged事件，okhttp 不能在子线程直接调用
@@ -46,7 +47,11 @@ class SNFragmentVM ( ) : ViewModel(){
                     if(response.code()==200) {
                         val o = JSONObject(response.body().string())
                         order.code.postValue(o.getString("billCode"))
-                        order.custname.postValue(o.getString("provider"))
+                        order.custname.postValue(o.getString("customer"))
+                        order.provider.postValue(o.getString("provider"))
+                        order.dpt.postValue(o.getString("dpt"))
+                        order.biz.postValue(o.getString("biz"))
+                        order.storeCode.postValue(o.getString("storeCode"))
                         orderList.add(order )
 
                         //通过代理 调用notifyDataSetChanged事件 刷新UI
@@ -55,7 +60,7 @@ class SNFragmentVM ( ) : ViewModel(){
                     else
                     {
 
-                        // 1、创建简单的AlertDialog
+                        // 1、创建简单的AlertDialog https://www.cnblogs.com/jiayongji/p/5371996.html
                         val dialog = AlertDialog.Builder(ad.context)
 
                         // (2)设置各种属性 // 注：不设置哪项属性，这个属性就默认不会显示出来

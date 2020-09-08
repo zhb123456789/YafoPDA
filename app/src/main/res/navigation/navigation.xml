@@ -12,28 +12,28 @@
         tools:layout="@layout/main_fragment" >
         <action
             android:id="@+id/action_main_to_SN"
-            app:destination="@id/SNFragment" />
+            app:destination="@id/sn_main_fragment" />
     </fragment>
     <fragment
-        android:id="@+id/SNFragment"
-        android:name="cn.com.yafo.yafopda.sn_fragment"
-        android:label="sn_fragment"
-        tools:layout="@layout/sn_fragment" >
+        android:id="@+id/sn_main_fragment"
+        android:name="cn.com.yafo.yafopda.SnMainFragment"
+        android:label="sn_main_fragment"
+        tools:layout="@layout/sn_main_fragment" >
         <action
-            android:id="@+id/action_SNFragment_to_mainFragment"
+            android:id="@+id/action_snMainFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
         <action
-            android:id="@+id/action_SNFragment_to_sn_order_info_fragment"
-            app:destination="@id/sn_order_info_fragment" />
+            android:id="@+id/action_snMainFragment_to_snOrderFragment"
+            app:destination="@id/sn_order_fragment" />
     </fragment>
     <fragment
-        android:id="@+id/sn_order_info_fragment"
-        android:name="cn.com.yafo.yafopda.sn_order_info_fragment"
-        android:label="sn_order_info_fragment"
-        tools:layout="@layout/sn_order_info_fragment" >
+        android:id="@+id/sn_order_fragment"
+        android:name="cn.com.yafo.yafopda.SnOrderFragment"
+        android:label="sn_order_fragment"
+        tools:layout="@layout/sn_order_fragment" >
         <action
-            android:id="@+id/action_sn_order_info_fragment_to_SNFragment"
-            app:destination="@id/SNFragment" />
+            android:id="@+id/action_snOrderFragment_to_snMainFragment"
+            app:destination="@id/sn_main_fragment" />
     </fragment>
 
 </navigation>

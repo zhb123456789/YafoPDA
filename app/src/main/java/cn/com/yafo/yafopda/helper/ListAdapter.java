@@ -11,7 +11,7 @@ import android.widget.BaseAdapter;
 
 import java.util.List;
 
-import cn.com.yafo.yafopda.databinding.SnItemBinding;
+import cn.com.yafo.yafopda.databinding.SnMainItemBinding;
 
 
 public class ListAdapter<T> extends BaseAdapter {
