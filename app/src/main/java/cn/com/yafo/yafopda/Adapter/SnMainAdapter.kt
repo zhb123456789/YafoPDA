@@ -18,8 +18,10 @@ import cn.com.yafo.yafopda.R
 import cn.com.yafo.yafopda.databinding.SnMainItemBinding
 import cn.com.yafo.yafopda.helper.CrashHandler
 import cn.com.yafo.yafopda.helper.Loading
+import cn.com.yafo.yafopda.vm.SnOrderEntryVM
 import cn.com.yafo.yafopda.vm.SnOrderVM
 import okhttp3.*
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
 
@@ -114,6 +116,23 @@ class SnMainAdapter(
                         order.dpt.postValue(o.getString("dpt"))
                         order.biz.postValue(o.getString("biz"))
                         order.storeCode.postValue(o.getString("storeCode"))
+
+                        var jsonArray =o.getJSONArray("billDetails")
+                        for ( i in 0 until jsonArray.length()){
+                            var jsonObject = jsonArray.getJSONObject(i);
+                            if (jsonObject != null) {
+
+                                var orEntry=SnOrderEntryVM()
+                                orEntry.invcode.postValue(jsonObject.optString("invCode"))
+                                orEntry.invname.postValue(jsonObject.optString("invName"))
+                                orEntry.should_out_num.postValue(jsonObject.optInt("shouldOutNum"))
+                                orEntry.checked_num.postValue(jsonObject.optInt("chkOutNum"))
+
+                                order.addorderEntry( orEntry )
+                            }
+
+                        }
+
                         data.add(order )
                         handler.sendEmptyMessage(200)
                     }

@@ -21,22 +21,22 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/button4"
-            style="@style/Widget.AppCompat.Button"
+        <TextView
+            android:id="@+id/invcode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/itcode"
-            android:text="@{orderitem.invcode}" />
+            android:layout_toEndOf="@id/invname"
+            android:text="@{orderitem.invcode}"
+            android:textSize="14sp"/>
 
         <TextView
-            android:id="@+id/itcode"
+            android:id="@+id/invname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{orderitem.invname}"
             android:textColor="@android:color/black"
-            android:textSize="20sp" />
+            android:textSize="14sp" />
 
     </RelativeLayout>
 </layout>

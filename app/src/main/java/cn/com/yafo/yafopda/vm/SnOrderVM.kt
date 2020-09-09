@@ -18,10 +18,9 @@ class SnOrderVM: ViewModel() {
     val chkOutTime = MutableLiveData<String>()
     val note = MutableLiveData<String>()
 
-    var details: MutableList<SnOrderEntryVM> = mutableListOf()
+    var orderEntrys: MutableList<SnOrderEntryVM> = mutableListOf()
 
-    fun addDetail(detail: SnOrderEntryVM, ad: SnOrderAdapter) {
-        details.add(detail)
-        ad.notifyDataSetChanged()
+    fun addorderEntry(orderEntry: SnOrderEntryVM) {
+        orderEntrys.add(orderEntry)
     }
 }

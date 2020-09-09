@@ -43,7 +43,7 @@ class SnOrderFragment : Fragment() {
         var order =vm.orderList[this!!.po!!]
         mBinding.order=order
         //定制Adapter 绑定List
-        adapter = SnOrderAdapter( order.details, context)
+        adapter = SnOrderAdapter( order.orderEntrys, context)
         mBinding.adapter=adapter
 
 //
