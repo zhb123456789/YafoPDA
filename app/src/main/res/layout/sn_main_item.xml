@@ -9,10 +9,12 @@
     </data>
 
     <RelativeLayout
-        android:id="@+id/snMainItem"
+        android:id="@+id/snMainItemLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dp">
+<!--   单击事件 另外写法     android:onClick="@{()->vm.shout()}"-->
+
 
 
         <LinearLayout

@@ -63,12 +63,12 @@ class SnMainFragment : Fragment() {
 
 
 //定制Adapter 绑定List
-        adapter = SnMainAdapter( vm.orderList, context)
+        adapter = SnMainAdapter( vm.orderList, requireContext())
         mBinding.adapter=adapter
 
 //绑定List 结束
 
-//通用Adapter 绑定List（代码有问题，需要修改）
+//通用Adapter 绑定List（需要引用其他包）  Android kotlin DataBinding 之 unresolved reference: BR 坑 https://blog.csdn.net/weixin_40929353/article/details/102911137
 //        val adapter: ListAdapter<OrderVM> = ListAdapter(context, list, R.layout.order_item, BR.Orders ) // 必须加 import androidx.databinding.library.baseAdapters.BR 或者直接用ID 数值
 //        mBinding.adapter=adapter
 //        val order =OrderVM()
@@ -84,7 +84,7 @@ class SnMainFragment : Fragment() {
         })
         //加号按钮
         mBinding.btnAddOrder.setOnClickListener(View.OnClickListener {
-            vm.addOrder(mBinding.eidtLastOrCode.text.toString(),adapter)
+            adapter.addOrder(mBinding.eidtLastOrCode.text.toString())
         })
         //输入框回车事件
         mBinding.eidtLastOrCode.setOnEditorActionListener { _, actionId, _ ->
@@ -103,9 +103,9 @@ class SnMainFragment : Fragment() {
             //获取结果值：
             var scanStatus= intent?.getStringExtra("SCAN_STATE");
             if("ok" == scanStatus){
-                if (intent != null) {
-                    vm.addOrder(intent.getStringExtra("SCAN_BARCODE1"),adapter)
-                    adapter.notifyDataSetChanged()
+                intent?.let {
+                    adapter.addOrder(intent.getStringExtra("SCAN_BARCODE1"))
+                   // adapter.notifyDataSetChanged()
                 }
             }else{
                 val t =
