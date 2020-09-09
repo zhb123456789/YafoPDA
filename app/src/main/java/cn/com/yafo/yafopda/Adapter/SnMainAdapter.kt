@@ -58,19 +58,31 @@ class SnMainAdapter(
                 override fun handleMessage(msg: Message?) {
                     super.handleMessage(msg)
                     when(msg?.what){
-                        0 ->{
+                        200 ->{
                             try {
                                notifyDataSetChanged()
                             } catch (ex : Throwable){
                                 ex.printStackTrace()
                             }
                         }
+                        500 -> {
+                            val dialog = AlertDialog.Builder(context)
+                            dialog.setTitle("错误:${msg?.what}")
+                            if (msg != null) {
+                                val o = JSONObject(msg.obj.toString())
+
+                                dialog.setMessage(o.getString("exceptionMessage"))
+                            }
+                            dialog.setCancelable(true)
+                            dialog.show()
+                            LoadingDismiss()
+                        }
                         else -> {
                         // 1、创建简单的AlertDialog https://www.cnblogs.com/jiayongji/p/5371996.html
                             val dialog = AlertDialog.Builder(context)
 
                             // (2)设置各种属性 // 注：不设置哪项属性，这个属性就默认不会显示出来
-                            dialog.setTitle("服务器错误:${msg?.arg1}")
+                            dialog.setTitle("服务器错误:${msg?.what}")
                             if (msg != null) {
                                 dialog.setMessage(msg.obj.toString())
                             }
@@ -103,14 +115,13 @@ class SnMainAdapter(
                         order.biz.postValue(o.getString("biz"))
                         order.storeCode.postValue(o.getString("storeCode"))
                         data.add(order )
-                        handler.sendEmptyMessage(0)
+                        handler.sendEmptyMessage(200)
                     }
                     else
                     {
                         val message = Message.obtain()
                         message.obj = response.body().string()
-                        message.arg1 = response.code()
-                        message.what = 1
+                        message.what = response.code()
                         handler.sendMessage(message)
                         //传递复杂类型的消息
 //                        val bundleData = Bundle()
