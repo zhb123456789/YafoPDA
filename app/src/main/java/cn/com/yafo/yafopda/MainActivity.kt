@@ -1,6 +1,10 @@
 package cn.com.yafo.yafopda
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -11,10 +15,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import cn.com.yafo.yafopda.helper.CrashHandler
-import cn.com.yafo.yafopda.helper.Loading
 import cn.com.yafo.yafopda.helper.StaticStr
 import cn.com.yafo.yafopda.vm.MainViewModel
 import com.xiaoluo.updatelib.UpdateManager
+import kotlinx.android.synthetic.main.main_activity.*
 import okhttp3.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -41,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val crashHandler = CrashHandler.getInstance()
@@ -52,18 +57,9 @@ class MainActivity : AppCompatActivity() {
         //自动更新
         checkUpdate()
 
-
-
-        // 添加Loading cancle()是按返回键，Loading框关闭的回调，可以做取消加载请求的操作。
-        val mLoading: Loading = object : Loading(this) {
-            override fun cancle() {}
-        }
-        // 显示Loading
-        mLoading.show();
-        // 关闭Loading
-        mLoading.dismiss();
-
         setContentView(R.layout.main_activity)
+
+        appVer.text = "V:"+getVersionCode(this)
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java] // 关键代码
         viewModel.username.set("22222")
@@ -105,7 +101,19 @@ class MainActivity : AppCompatActivity() {
             .addToBackStack("").commit()
     }
 
-
+    //获取当前版本号
+    fun getVersionCode(context: Context): String? {
+        try {
+            val packageManager: PackageManager = context.packageManager
+            val packageInfo: PackageInfo = packageManager.getPackageInfo(
+                context.packageName, 0
+            )
+            return packageInfo.versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        return null
+    }
     fun update(appName:String ,verCode:Int,verName:String)
     {
         //https://www.jianshu.com/p/e8449ea77280
