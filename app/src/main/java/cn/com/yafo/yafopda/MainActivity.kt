@@ -1,18 +1,24 @@
 package cn.com.yafo.yafopda
 
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.os.PersistableBundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import cn.com.yafo.yafopda.helper.CrashHandler
 import cn.com.yafo.yafopda.helper.Loading
+import cn.com.yafo.yafopda.helper.StaticStr
 import cn.com.yafo.yafopda.vm.MainViewModel
+import com.xiaoluo.updatelib.UpdateManager
+import okhttp3.*
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.IOException
 
 
 class MainActivity : AppCompatActivity() {
@@ -20,7 +26,20 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     val userparam = MutableLiveData<String>()
-
+    val handler : Handler = object : Handler(){
+        override fun handleMessage(msg: Message?) {
+            super.handleMessage(msg)
+            when(msg?.what){
+                0 -> try {
+                    msg.data.getString("appName")?.let { update(it,msg.data.getInt("appVer"),
+                        msg.data.getString("appVerName")!!
+                    ) }
+                } catch (ex : Throwable){
+                    ex.printStackTrace()
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +48,11 @@ class MainActivity : AppCompatActivity() {
         crashHandler.init(applicationContext)
         // 发送以前没发送的报告(可选)
         //crashHandler.sendPreviousReportsToServer()
+
+        //自动更新
+        checkUpdate()
+
+
 
         // 添加Loading cancle()是按返回键，Loading框关闭的回调，可以做取消加载请求的操作。
         val mLoading: Loading = object : Loading(this) {
@@ -73,44 +97,67 @@ class MainActivity : AppCompatActivity() {
 
     fun btnSNonClick(v: View) {
 
-            // 参数设置
-            val bundle = Bundle()
-            bundle.putString("name", "TeaOf")
+        // 参数设置
+        val bundle = Bundle()
+        bundle.putString("name", "TeaOf")
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, SnMainFragment.newInstance("1","2"))
             .addToBackStack("").commit()
-        }
-
-    //获取当前版本号
-    fun getVersionCode(context: Context): String? {
-        try {
-            val packageManager: PackageManager = context.packageManager
-            val packageInfo: PackageInfo = packageManager.getPackageInfo(
-                context.packageName, 0
-            )
-            return packageInfo.versionName
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-        }
-        return null
     }
-    //检查更新 https://www.jianshu.com/p/f49036f5cd3b?utm_campaign=maleskine&utm_content=note&utm_medium=seo_notes
-    fun checkUpdate()
+
+
+    fun update(appName:String ,verCode:Int,verName:String)
     {
-//        if (getVersionCode(activity)!!.toInt() < `object`.getString("verCode").toInt()) {
-//            val msg: Message = Message.obtain()
-//            msg.obj = downloadAdd + `object`.getString("apkname") //apk下载地址
-//            handler.sendMessage(msg)
-//        } else {
-//            val apkfile = File(apk)
-//            if (apkfile.isFile()) {
-//                apkfile.delete()
-//            }
-//            if (tip) {
-//                activity.runOnUiThread(Runnable { show(activity, "已经是最新版本", 1) })
-//            }
-//        }
+        //https://www.jianshu.com/p/e8449ea77280
+        UpdateManager.getInstance().init(this) // 获取实例并初始化,必要
+            .compare(UpdateManager.COMPARE_VERSION_NAME) // 通过版本号或版本名比较,默认版本号
+            .downloadUrl(StaticStr.GetUrl("/fordownload/yafopad/$appName")) // 下载地址,必要
+            .downloadTitle("正在下载洋帆手持机程序") // 下载标题
+            .lastestVerName(verName) // 最新版本名
+            .lastestVerCode(verCode) // 最新版本号
+            // .minVerName("1.0") // 最低版本名
+            // .minVerCode(1) // 最低版本号
+            // .isForce(true) // 是否强制更新,true无视版本直接更新
+            .update() // 开始更新
+        // 设置版本对比回调
+        // .setListener { result -> Toast.makeText(this, result, Toast.LENGTH_SHORT).show() }
     }
+    //检查更新
+    fun checkUpdate() {
+        val client = OkHttpClient()
+        val request = Request.Builder().get()
+            .url(StaticStr.GetUrl("/fordownload/yafopad/output.json"))
+            .build()
+        val call = client.newCall(request)
 
+        call.enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.d("UPDATE", "onFailure: $e")
+            }
+
+            @Throws(IOException::class)
+            override fun onResponse(call: Call, response: Response) {
+
+                var jsonArray =JSONArray(response.body().string())
+                val jsonObject = jsonArray.getJSONObject(0)
+
+                var appName = jsonObject["path"].toString()
+                val data= JSONObject(jsonObject.getString("apkData"))
+                var appVer = data.getInt("versionCode")
+                var appVerName = data.getString("versionName")
+
+                val message = Message.obtain()
+                message.what = 0
+
+                //传递复杂类型的消息
+                val bundleData = Bundle()
+                bundleData.putString("appName", appName)
+                bundleData.putString("appVerName", appVerName)
+                bundleData.putInt("appVer", appVer)
+                message.data = bundleData
+                handler.sendMessage(message)
+            }
+        })
+    }
 }
 
