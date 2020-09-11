@@ -194,11 +194,7 @@ class SnMainAdapter(
         binding!!.setVariable(BR.order, data[position]) //BR.Orders 不要写错了
         //binding.setOrder(data.get(position)); //BR.Orders 此方法也可以
         binding.btDel.setOnClickListener(OnDelClickListener(position))
-        binding.snMainItemLayout.setOnClickListener(
-            OnItemClickListener(
-                position
-            )
-        )
+        binding.snMainItemLayout.setOnClickListener(OnItemClickListener(position))
         //https://segmentfault.com/a/1190000008246487  binding.setVariable(variableId, data.get(position));
         return binding.root
     }

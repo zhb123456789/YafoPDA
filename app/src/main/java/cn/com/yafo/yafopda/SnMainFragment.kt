@@ -84,7 +84,7 @@ class SnMainFragment : Fragment() {
         })
         //加号按钮
         mBinding.btnAddOrder.setOnClickListener(View.OnClickListener {
-            adapter.addOrder(mBinding.eidtLastOrCode.text.toString())
+            adapter.addOrder(mBinding.spinner.selectedItem.toString() + mBinding.eidtLastOrCode.text.toString())
         })
         //输入框回车事件
         mBinding.eidtLastOrCode.setOnEditorActionListener { _, actionId, _ ->
@@ -105,7 +105,7 @@ class SnMainFragment : Fragment() {
             if("ok" == scanStatus){
                 intent?.let {
                     adapter.addOrder(intent.getStringExtra("SCAN_BARCODE1"))
-                   // adapter.notifyDataSetChanged()
+                    // adapter.notifyDataSetChanged()
                 }
             }else{
                 val t =

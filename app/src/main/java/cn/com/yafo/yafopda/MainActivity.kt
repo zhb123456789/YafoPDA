@@ -13,9 +13,11 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import cn.com.yafo.yafopda.helper.CrashHandler
-import cn.com.yafo.yafopda.helper.StaticStr
+import cn.com.yafo.yafopda.helper.GlobalVar
 import cn.com.yafo.yafopda.vm.MainViewModel
 import com.xiaoluo.updatelib.UpdateManager
 import kotlinx.android.synthetic.main.main_activity.*
@@ -28,7 +30,7 @@ import java.io.IOException
 class MainActivity : AppCompatActivity() {
     var fragmentmain: MainFragment ? = null
 
-    private lateinit var viewModel: MainViewModel
+    //private lateinit var viewModel: MainViewModel
     val userparam = MutableLiveData<String>()
     val handler : Handler = object : Handler(){
         override fun handleMessage(msg: Message?) {
@@ -61,8 +63,15 @@ class MainActivity : AppCompatActivity() {
 
         appVer.text = "V:"+getVersionCode(this)
 
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java] // 关键代码
-        viewModel.username.set("22222")
+        GlobalVar.userVM = ViewModelProvider(this)[MainViewModel::class.java] // 关键代码
+       // viewModel.username.value=("22222111")
+
+        GlobalVar.userVM.username.observe(this, Observer {
+           // Log.e(TAG, "updated: $it")
+            mainUser.text = it
+        })
+
+
         //按 HOME 键禁止回到桌面
         val intent = Intent("nlscan.action.HOMEKEY_SWITCH_STATE")
         intent.putExtra("ENABLE", false)
@@ -119,7 +128,7 @@ class MainActivity : AppCompatActivity() {
         //https://www.jianshu.com/p/e8449ea77280
         UpdateManager.getInstance().init(this) // 获取实例并初始化,必要
             .compare(UpdateManager.COMPARE_VERSION_NAME) // 通过版本号或版本名比较,默认版本号
-            .downloadUrl(StaticStr.GetUrl("/fordownload/yafopad/$appName")) // 下载地址,必要
+            .downloadUrl(GlobalVar.GetUrl("/fordownload/yafopad/$appName")) // 下载地址,必要
             .downloadTitle("正在下载洋帆手持机程序") // 下载标题
             .lastestVerName(verName) // 最新版本名
             .lastestVerCode(verCode) // 最新版本号
@@ -134,7 +143,7 @@ class MainActivity : AppCompatActivity() {
     fun checkUpdate() {
         val client = OkHttpClient()
         val request = Request.Builder().get()
-            .url(StaticStr.GetUrl("/fordownload/yafopad/output.json"))
+            .url(GlobalVar.GetUrl("/fordownload/yafopad/output.json"))
             .build()
         val call = client.newCall(request)
 

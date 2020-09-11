@@ -1,6 +1,7 @@
 package cn.com.yafo.yafopda
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,17 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import cn.com.yafo.yafopda.databinding.MainFragmentBinding
-import cn.com.yafo.yafopda.helper.Loading
-import cn.com.yafo.yafopda.vm.LoginVm
+import cn.com.yafo.yafopda.helper.GlobalVar
 import cn.com.yafo.yafopda.vm.MainViewModel
 
 
 class MainFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = MainFragment()
-    }
-
 
 
     private lateinit var mBinding: MainFragmentBinding
@@ -32,11 +27,9 @@ class MainFragment : Fragment() {
         //mBinding = DataBindingUtil.setContentView(getActivity(),R.layout.station_fragment_home);
 
         var viewModel = ViewModelProvider(this.requireActivity()).get(MainViewModel::class.java) // 关键代码
-        var loginVm = ViewModelProvider(this.requireActivity()).get(LoginVm::class.java) // 关键代码
 
         //直接使用绑定 的属性 ObservableField
         mBinding.user=viewModel
-        mBinding.login=loginVm
 
         mBinding.lifecycleOwner = this.requireActivity()
 
@@ -52,9 +45,16 @@ class MainFragment : Fragment() {
 
         //设置按钮导航
         mBinding.btnSN.setOnClickListener(View.OnClickListener { v ->
-            val controller = Navigation.findNavController(v)
-
-            controller.navigate(R.id.action_main_to_SN)
+            if (GlobalVar.userVM.username.value == null)
+            { val t =
+                Toast.makeText(context, "请先填写用户名或编码", Toast.LENGTH_LONG)
+                t.setGravity(Gravity.TOP, 0, 0)
+                t.show()
+            }
+            else {
+                val controller = Navigation.findNavController(v)
+                controller.navigate(R.id.action_main_to_SN)
+            }
         })
 
 

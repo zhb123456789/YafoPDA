@@ -37,20 +37,14 @@ class User2:LiveData<User2>()
 
 class MainViewModel : ViewModel() {
     // TODO: Implement the ViewModel
-    val username= ObservableField<String>()
+    val username= MutableLiveData<String>()
     val password= MutableLiveData<String>()
-    val user= MutableLiveData<User>()
 
-    private val u2 = User2()
 
-    fun getu2(): User2? {
-        return u2
-    }
     fun btnBoxOnClick()
     {
-        username.set("1211134")
-        password.value=username.get()+password.value
-        user.value = User("111","222")
+        username.value=("1211134")
+        password.value=username.value+password.value
     }
 
 

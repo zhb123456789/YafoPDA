@@ -60,15 +60,17 @@ public class SnOrderAdapter extends BaseAdapter {
         //binding.setVariable(BR.orderitem, data.get(position)); //BR 不要写错了
         binding.setOrderitem(data.get(position)); //BR. 此方法也可以
         //binding.button4.setOnClickListener(new OnBtnClickListener( position));
+
+        binding.snOrderItemLayout.setOnClickListener(new OnItemClickListener(position));
         return binding.getRoot();
 
     }
 
-    public class OnBtnClickListener implements View.OnClickListener{
+    public class OnItemClickListener implements View.OnClickListener{
 
         private Integer position;
 
-        public OnBtnClickListener( Integer position) {
+        public OnItemClickListener( Integer position) {
             this.position = position;
         }
 
