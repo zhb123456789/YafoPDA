@@ -74,6 +74,15 @@ class SnOrderEntryAdapter(
         return binding.root
     }
 
+    fun addSnItem(snStr:String)
+    {
+     if(snStr != null) {
+         if (!data.snList.contains(snStr)) {
+             data.snList.add(snStr)
+             notifyDataSetChanged()
+         }
+     }
+    }
     init {
         mLoading = object : Loading(context) {
             override fun cancle() {}
