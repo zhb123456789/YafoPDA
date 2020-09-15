@@ -1,11 +1,7 @@
 package cn.com.yafo.yafopda.Adapter
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,18 +11,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import cn.com.yafo.yafopda.BR
 import cn.com.yafo.yafopda.R
-import cn.com.yafo.yafopda.databinding.SnMainItemBinding
-import cn.com.yafo.yafopda.helper.CrashHandler
+import cn.com.yafo.yafopda.databinding.SnOrderEntryItemBinding
 import cn.com.yafo.yafopda.helper.Loading
 import cn.com.yafo.yafopda.vm.SnOrderEntryVM
-import cn.com.yafo.yafopda.vm.SnOrderVM
-import okhttp3.*
-import org.json.JSONArray
-import org.json.JSONObject
-import java.io.IOException
 
 class SnOrderEntryAdapter(
-    private val data: MutableList<SnOrderVM>,
+    private val data: SnOrderEntryVM,
     var context: Context
 ) :
     BaseAdapter() {
@@ -45,11 +35,11 @@ class SnOrderEntryAdapter(
 
 
     override fun getCount(): Int {
-        return data.size
+        return data.snList.size
     }
 
     override fun getItem(position: Int): Any {
-        return data[position]
+        return data.snList[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -61,12 +51,12 @@ class SnOrderEntryAdapter(
         convertView: View?,
         parent: ViewGroup
     ): View {
-        val binding: SnMainItemBinding?
+        val binding: SnOrderEntryItemBinding?
         //ItemListBinding
         if (convertView == null) {
             binding = DataBindingUtil.inflate(
                 LayoutInflater.from(context),
-                R.layout.sn_main_item,  //子项布局ID
+                R.layout.sn_order_entry_item,  //子项布局ID
                 parent, false
             )
             if (binding == null) {
@@ -78,9 +68,8 @@ class SnOrderEntryAdapter(
             // binding = (SnOrderItemBinding) convertView.getTag();
             binding = DataBindingUtil.getBinding(convertView)
         }
-        binding!!.setVariable(BR.order, data[position]) //BR.Orders 不要写错了
-        //binding.setOrder(data.get(position)); //BR.Orders 此方法也可以
-
+        binding!!.setVariable(BR.sn, data.snList[position])
+        binding.snOrderEntryItemLayout .setOnClickListener(OnItemClickListener(position))
         //https://segmentfault.com/a/1190000008246487  binding.setVariable(variableId, data.get(position));
         return binding.root
     }
@@ -89,6 +78,24 @@ class SnOrderEntryAdapter(
         mLoading = object : Loading(context) {
             override fun cancle() {}
         }
+    }
+
+    inner class OnItemClickListener(private val position: Int) : View.OnClickListener {
+        override fun onClick(view: View) {
+            try {
+                val bundle = Bundle()
+                bundle.putInt("position", position)
+                Navigation.findNavController(view)
+                    .navigate(R.id.action_sn_order_fragment_to_sn_order_entry_fragment, bundle)
+
+                // Toast.makeText(context,position, Toast.LENGTH_LONG).show();
+                notifyDataSetChanged() //刷新数据
+
+            } catch (e: Exception) {
+                Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show()
+            }
+        }
+
     }
 
 }

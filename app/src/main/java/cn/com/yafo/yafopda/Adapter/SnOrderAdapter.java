@@ -23,9 +23,12 @@ public class SnOrderAdapter extends BaseAdapter {
 
     private Context context;
 
-    public SnOrderAdapter(List<SnOrderEntryVM> data, Context context) {
+    private  Integer po;
+
+    public SnOrderAdapter(List<SnOrderEntryVM> data,Integer po, Context context) {
         this.data = data;
         this.context = context;
+        this.po = po;
     }
 
     @Override
@@ -78,11 +81,12 @@ public class SnOrderAdapter extends BaseAdapter {
         public void onClick(View view) {
             try {
                 Bundle bundle = new Bundle();
-                bundle.putInt("position", position);
-                Navigation.findNavController(view).navigate(R.id.action_snOrderFragment_to_snMainFragment, bundle);
+                bundle.putInt("positionOrder", po);
+                bundle.putInt("positionEntry", position);
+                Navigation.findNavController(view).navigate(R.id.action_sn_order_fragment_to_sn_order_entry_fragment, bundle);
 
                // Toast.makeText(context,position, Toast.LENGTH_LONG).show();
-                notifyDataSetChanged();//刷新数据
+                //notifyDataSetChanged();//刷新数据
             }
             catch(Exception e)
             {Toast.makeText(context,e.toString(), Toast.LENGTH_LONG).show();}

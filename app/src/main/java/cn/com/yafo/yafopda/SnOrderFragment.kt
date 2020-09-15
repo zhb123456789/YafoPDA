@@ -24,10 +24,6 @@ class SnOrderFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var po: Int? = null
 
-    var list : MutableList <SnOrderVM> =mutableListOf()
-    var vm:SnMainFragmentVM = SnMainFragmentVM()
-    lateinit var adapter: SnOrderAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -37,13 +33,12 @@ class SnOrderFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
-        vm= ViewModelProvider(this.requireActivity()).get(SnMainFragmentVM::class.java) // 关键代码
+        var vm= ViewModelProvider(this.requireActivity()).get(SnMainFragmentVM::class.java) // 关键代码
         var mBinding: SnOrderFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.sn_order_fragment,container,false)
         var order =vm.orderList[this!!.po!!]
         mBinding.order=order
         //定制Adapter 绑定List
-        adapter = SnOrderAdapter( order.orderEntrys, context)
+        var adapter: SnOrderAdapter = SnOrderAdapter( order.orderEntrys,this!!.po!!, context)
         mBinding.adapter=adapter
 
 //

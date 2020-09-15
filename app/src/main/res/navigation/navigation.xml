@@ -34,13 +34,19 @@
         <action
             android:id="@+id/action_snOrderFragment_to_snMainFragment"
             app:destination="@id/sn_main_fragment" />
+        <action
+            android:id="@+id/action_sn_order_fragment_to_sn_order_entry_fragment"
+            app:destination="@id/sn_order_entry_fragment" />
     </fragment>
     <fragment
         android:id="@+id/sn_order_entry_fragment"
-        android:name="cn.com.yafo.yafopda.SnOrderDetailFragment"
+        android:name="cn.com.yafo.yafopda.SnOrderEntryFragment"
         android:label="sn_order_fragment"
         tools:layout="@layout/sn_order_fragment" >
 
+        <action
+            android:id="@+id/action_sn_order_entry_fragment_to_sn_order_fragment"
+            app:destination="@id/sn_order_fragment" />
     </fragment>
 
 </navigation>

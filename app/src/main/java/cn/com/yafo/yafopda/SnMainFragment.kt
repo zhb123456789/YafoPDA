@@ -36,7 +36,6 @@ class SnMainFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    var list : MutableList <SnOrderVM> =mutableListOf()
     var vm:SnMainFragmentVM = SnMainFragmentVM()
     lateinit var adapter: SnMainAdapter
 

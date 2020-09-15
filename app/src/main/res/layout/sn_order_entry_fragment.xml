@@ -5,8 +5,8 @@
     <data>
         <!--绑定数据类-->
         <variable
-            name="order"
-            type="cn.com.yafo.yafopda.vm.SnOrderVM"/>
+            name="orderEntry"
+            type="cn.com.yafo.yafopda.vm.SnOrderEntryVM"/>
         <variable
             name="adapter"
             type="android.widget.BaseAdapter"/>
@@ -25,7 +25,7 @@
             android:imeOptions="actionSearch"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="@={order.code}"
+            android:text="@={orderEntry.invname}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="sn_order_detail_fragment"
+            android:text="sn_order_entry_fragment"
             app:layout_constraintStart_toEndOf="@+id/TmpCode"
             app:layout_constraintTop_toTopOf="parent" />
 

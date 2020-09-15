@@ -4,11 +4,12 @@
 
     <data>
         <variable
-            name="orderitem"
-            type="cn.com.yafo.yafopda.vm.SnOrderEntryVM"/>
+            name="sn"
+            type="String"/>
     </data>
 
     <RelativeLayout
+        android:id="@+id/snOrderEntryItemLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dp">
@@ -25,7 +26,7 @@
             android:id="@+id/itcode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{orderitem.invname}"
+            android:text="@{sn}"
             android:textColor="@android:color/black"
             android:textSize="20sp" />
 
