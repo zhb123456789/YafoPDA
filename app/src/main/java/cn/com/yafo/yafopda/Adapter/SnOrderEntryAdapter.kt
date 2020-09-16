@@ -12,6 +12,7 @@ import androidx.navigation.Navigation
 import cn.com.yafo.yafopda.BR
 import cn.com.yafo.yafopda.R
 import cn.com.yafo.yafopda.databinding.SnOrderEntryItemBinding
+import cn.com.yafo.yafopda.helper.BeeAndVibrateManager
 import cn.com.yafo.yafopda.helper.Loading
 import cn.com.yafo.yafopda.vm.SnOrderEntryVM
 
@@ -80,6 +81,11 @@ class SnOrderEntryAdapter(
          if (!data.snList.contains(snStr)) {
              data.snList.add(snStr)
              notifyDataSetChanged()
+         }
+         else
+         {
+             //提示音
+             BeeAndVibrateManager.playBeeAndVibrate(context,R.raw.serialnumberduplicate ,500,null)
          }
      }
     }
