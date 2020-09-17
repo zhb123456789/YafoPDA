@@ -11,73 +11,65 @@
             name="adapter"
             type="android.widget.BaseAdapter"/>
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/sn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#E3E3E3"
         tools:context=".SnMainFragment">
 
-        <!-- TODO: Update blank fragment layout -->
-
-        <EditText
-            android:id="@+id/eidtLastOrCode"
-            android:imeOptions="actionSearch"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:nextFocusDown="@+id/btnAddOrder"
-            android:layout_width="160dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/btnAddOrder"
-            app:layout_constraintStart_toEndOf="@+id/spinner"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <Button
-            android:id="@+id/btnAddOrder"
-            style="@style/CommonButtonStyle"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginEnd="24dp"
-            android:text="+"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:text="返回"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner" />
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="86dp"
-            android:layout_height="26dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:entries="@array/spinnerclass"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="8dp"
-            android:background="#3C3F41"
+            android:layout_height="70dp"
+            android:background="#FFFFFF"
+            android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="86dp"
+                android:layout_height="26dp"
+                android:layout_marginStart="16dp"
+                android:entries="@array/spinnerclass"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/eidtLastOrCode"
+                android:layout_width="140dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:imeOptions="actionSearch"
+                android:maxLines="1"
+                android:nextFocusDown="@+id/btnAddOrder"
+                android:singleLine="true"
+                app:layout_constraintEnd_toStartOf="@+id/btnAddOrder"
+                app:layout_constraintStart_toEndOf="@+id/spinner"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <Button
+                android:id="@+id/btnAddOrder"
+                style="@style/CommonButtonStyle"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="64dp"
+                android:text="+"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="122dp"
+            android:layout_marginTop="76dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -92,6 +84,7 @@
                 app:adapter="@{adapter}" />
 
         </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -77,10 +77,10 @@ class SnMainFragment : Fragment() {
         mBinding.lifecycleOwner = this.requireActivity()
 
         //返回按钮
-        mBinding.button.setOnClickListener(View.OnClickListener { v ->
-            val controller = Navigation.findNavController(v)
-            controller.navigate(R.id.action_snMainFragment_to_mainFragment)
-        })
+//        mBinding.button.setOnClickListener(View.OnClickListener { v ->
+//            val controller = Navigation.findNavController(v)
+//            controller.navigate(R.id.action_snMainFragment_to_mainFragment)
+//        })
         //加号按钮
         mBinding.btnAddOrder.setOnClickListener(View.OnClickListener {
             adapter.addOrder(mBinding.spinner.selectedItem.toString() + mBinding.eidtLastOrCode.text.toString())

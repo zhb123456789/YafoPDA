@@ -12,9 +12,9 @@
         android:id="@+id/snMainItemLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#FFFFFF"
         android:padding="10dp">
-<!--   单击事件 另外写法     android:onClick="@{()->vm.shout()}"-->
-
+        <!--   单击事件 另外写法     android:onClick="@{()->vm.shout()}"-->
 
 
         <LinearLayout
@@ -23,37 +23,38 @@
 
             android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/orderCode"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{`单号：`+order.code}"
-                    android:textColor="@android:color/black"
-                    android:layout_centerVertical="true"
-                    android:textSize="14sp" />
-                <TextView
-                    android:id="@+id/store"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{`仓库：`+order.storeCode}"
-                    android:textColor="@android:color/black"
-                    android:paddingLeft="@dimen/txt_big_size"
-                    android:textSize="14sp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/orderCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@{`单号：`+order.code}"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/store"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/txt_big_size"
+                        android:text="@{`仓库：`+order.storeCode}"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
-
-
-        </LinearLayout>
-
 
 
             <LinearLayout
@@ -89,6 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/dpt"
                     android:layout_width="wrap_content"
@@ -104,6 +106,7 @@
                     android:text="@{`业务：`+order.biz}"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -111,8 +114,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@id/orderCode"
                     android:gravity="right"
-                    android:paddingLeft="@dimen/txt_big_size"
-                    >
+                    android:paddingLeft="@dimen/txt_big_size">
 
                     <Button
                         android:id="@+id/btDel"
