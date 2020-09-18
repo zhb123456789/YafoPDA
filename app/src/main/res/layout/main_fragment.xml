@@ -42,6 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:background="@drawable/edit_shape"
                     android:hint="请输入姓名或者编码"
                     android:text="@={user.username}"
                     app:layout_constraintStart_toStartOf="parent"
