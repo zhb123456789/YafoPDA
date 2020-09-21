@@ -18,19 +18,19 @@
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -48,29 +48,43 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/txt_big_size"
                         android:text="@{`仓库：`+order.storeCode}"
-                        android:textColor="@android:color/black"
+                        android:textColor="@android:color/tab_indicator_text"
                         android:textSize="14sp" />
-                    <Button
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+                    <ImageView
                         android:id="@+id/btDel"
-                        style="@style/Widget.AppCompat.Button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="32sp"
-                        android:layout_toEndOf="@id/orderCode"
-                        android:text="移除"
-                        android:textSize="12sp" />
+                        android:gravity="center"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        app:srcCompat="@drawable/delete" />
+
 
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EDEDED" />
+                </LinearLayout>
                 <TextView
                     android:id="@+id/customName"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="24dp"
                     android:text="@{`客户：`+order.custname}"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="24dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -78,26 +92,28 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{`部门：`+order.dpt}"
-                        android:textColor="@android:color/black"
+                        android:textColor="@android:color/tab_indicator_text"
                         android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/biz"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{`业务：`+order.biz}"
-                        android:textColor="@android:color/black"
+                        android:text="@{` 业务：`+order.biz}"
+                        android:textColor="@android:color/tab_indicator_text"
                         android:textSize="14sp" />
                 </LinearLayout>
 
                 <TextView
                     android:id="@+id/note"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="24dp"
                     android:text="@{`备注：`+order.note}"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
+
+
     </RelativeLayout>
 </layout>
