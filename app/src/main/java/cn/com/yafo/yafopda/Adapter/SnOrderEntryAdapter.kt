@@ -100,8 +100,7 @@ class SnOrderEntryAdapter(
             try {
                 val bundle = Bundle()
                 bundle.putInt("position", position)
-                Navigation.findNavController(view)
-                    .navigate(R.id.action_sn_order_fragment_to_sn_order_entry_fragment, bundle)
+
 
                 // Toast.makeText(context,position, Toast.LENGTH_LONG).show();
                 notifyDataSetChanged() //刷新数据

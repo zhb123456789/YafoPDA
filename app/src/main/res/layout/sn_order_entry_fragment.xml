@@ -8,6 +8,9 @@
             name="orderEntry"
             type="cn.com.yafo.yafopda.vm.SnOrderEntryVM"/>
         <variable
+            name="orderCode"
+            type="String"/>
+        <variable
             name="adapter"
             type="android.widget.BaseAdapter"/>
 
@@ -15,48 +18,115 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scrollbars="none"
         tools:context=".snOrderEntryFragment">
-
-        <EditText
-            android:id="@+id/TmpCode"
-            android:layout_width="160dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="16dp"
-            android:imeOptions="actionSearch"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:text="@={orderEntry.invname}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="80dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ListView
-                android:id="@+id/list_view"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                app:adapter="@{adapter}" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:background="@drawable/sn_header_background_lightblue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:text="@{`单号：`+orderCode}"
+                        android:textSize="14dp"
+                        android:textColor="#666"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:textColor="#666"
+                        android:textSize="14dp"
+                        android:layout_marginStart="@dimen/size_18"
+                        android:text="@{orderEntry.invcode}"/>
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:text="@{`数量：`+orderEntry.should_in_num}"
+                        android:textColor="#666"
+                        android:textSize="14dp" />
+
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:paddingTop="5dp"
+                    android:layout_height="1dp"
+                    android:background="#AAA" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:text="@{ orderEntry.invname}"
+                    android:textColor="#666666"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingTop="10dp"
+                    android:text="@{`剩余：`+orderEntry.should_in_num}"
+                    android:textColor="#FFFFFF"
+                    android:textSize="28dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ListView
+                    android:id="@+id/list_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    app:adapter="@{adapter}" >
+
+                </ListView>
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:text="手工录入序列号SN" />
+            </LinearLayout>
+
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="sn_order_entry_fragment"
-            app:layout_constraintStart_toEndOf="@+id/TmpCode"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -50,7 +50,9 @@ class SnOrderEntryFragment : Fragment() {
         var vm= ViewModelProvider(this.requireActivity()).get(SnMainFragmentVM::class.java) // 关键代码
         var mBinding: SnOrderEntryFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.sn_order_entry_fragment,container,false)
         var orderEntry =vm.orderList[this!!.poOrder!!].orderEntrys[this!!.poOrderEntry!!]
+        var orderCode =vm.orderList[this!!.poOrder!!].code
         mBinding.orderEntry=orderEntry
+        mBinding.orderCode=orderCode.value
         //定制Adapter 绑定List
         //orderEntry.snList.add( "123")
         adapter = SnOrderEntryAdapter( orderEntry,  requireContext())
