@@ -82,7 +82,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="11dp"
                         android:gravity="center_horizontal"
-                        android:text="验货" />
+                        android:text="盘点" />
 
                 </LinearLayout>
 
@@ -106,7 +106,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="11dp"
                         android:gravity="center_horizontal"
-                        android:text="验货11" />
+                        android:text="移库" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -155,7 +155,7 @@
                         android:id="@+id/btnSN"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:text="SN收集"
+                        android:text="验货"
                         android:textSize="24sp"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/button_circle_shape"
@@ -167,7 +167,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="11dp"
                         android:gravity="center_horizontal"
-                        android:text="SN收集" />
+                        android:text="验货" />
                 </LinearLayout>
             </LinearLayout>
 

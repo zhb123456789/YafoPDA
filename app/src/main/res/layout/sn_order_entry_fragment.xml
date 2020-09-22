@@ -115,13 +115,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
+                    android:layout_weight="1"
                     app:adapter="@{adapter}" >
 
                 </ListView>
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/addSn"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
+                    android:layout_gravity="bottom"
                     android:text="手工录入序列号SN" />
             </LinearLayout>
 
