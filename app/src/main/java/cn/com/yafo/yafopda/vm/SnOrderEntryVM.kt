@@ -8,8 +8,7 @@ class SnOrderEntryVM : ViewModel() {
     var invcode= MutableLiveData<String>()
     var invname= MutableLiveData<String>()
     var invclass= MutableLiveData<String>()
-    var should_in_num= MutableLiveData<Int>()
-    var should_out_num= MutableLiveData<Int>()
+    var ncChkNum= MutableLiveData<Int>()
     var checked_num= MutableLiveData<Int>()
     var snList : MutableList<String> = mutableListOf()
 }

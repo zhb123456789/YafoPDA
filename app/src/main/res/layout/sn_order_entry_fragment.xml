@@ -67,7 +67,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="24dp"
-                        android:text="@{`数量：`+orderEntry.should_in_num}"
+                        android:text="@{`数量：`+orderEntry.ncChkNum}"
                         android:textColor="#666"
                         android:textSize="14dp" />
 
@@ -93,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:paddingTop="10dp"
-                    android:text="@{`剩余：`+orderEntry.should_in_num}"
+                    android:text="@{`剩余：`+orderEntry.ncChkNum}"
                     android:textColor="#FFFFFF"
                     android:textSize="28dp"
                     android:textStyle="bold" />

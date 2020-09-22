@@ -112,7 +112,6 @@ class SnMainAdapter(
                         val o = JSONObject(response.body().string())
                         order.code.postValue(o.getString("billCode"))
                         order.custname.postValue(o.getString("customer"))
-                        order.provider.postValue(o.getString("provider"))
                         order.dpt.postValue(o.getString("dpt"))
                         order.biz.postValue(o.getString("biz"))
                         order.storeCode.postValue(o.getString("storeCode"))
@@ -125,8 +124,7 @@ class SnMainAdapter(
                                 var orEntry=SnOrderEntryVM()
                                 orEntry.invcode.postValue(jsonObject.optString("invCode"))
                                 orEntry.invname.postValue(jsonObject.optString("invName"))
-                                orEntry.should_out_num.postValue(jsonObject.optInt("shouldOutNum"))
-                                orEntry.checked_num.postValue(jsonObject.optInt("chkOutNum"))
+                                orEntry.ncChkNum.postValue(jsonObject.optInt("ncChkNum"))
 
                                 order.addorderEntry( orEntry )
                             }
