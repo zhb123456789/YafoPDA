@@ -11,11 +11,11 @@ import android.os.Message
 import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import cn.com.yafo.yafopda.helper.CrashHandler
 import cn.com.yafo.yafopda.helper.GlobalVar
 import cn.com.yafo.yafopda.vm.MainViewModel
@@ -52,9 +52,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val crashHandler = CrashHandler.getInstance()
         // 注册crashHandler
-        crashHandler.init(applicationContext)
-        // 发送以前没发送的报告(可选)
-        //crashHandler.sendPreviousReportsToServer()
+        CrashHandler.getInstance()
+            .initHandler { t, e -> Toast.makeText(applicationContext, "未处理异常：" + t.name + e.toString(), Toast.LENGTH_LONG).show() }
+
 
         //自动更新
         checkUpdate()

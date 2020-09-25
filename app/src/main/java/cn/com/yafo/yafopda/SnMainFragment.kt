@@ -14,10 +14,8 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import cn.com.yafo.yafopda.Adapter.SnMainAdapter
 import cn.com.yafo.yafopda.databinding.SnMainFragmentBinding
-import cn.com.yafo.yafopda.vm.SnOrderVM
 import cn.com.yafo.yafopda.vm.SnMainFragmentVM
 
 
@@ -102,9 +100,27 @@ class SnMainFragment : Fragment() {
             //获取结果值：
             var scanStatus= intent?.getStringExtra("SCAN_STATE");
             if("ok" == scanStatus){
-                intent?.let {
-                    adapter.addOrder(intent.getStringExtra("SCAN_BARCODE1"))
-                    // adapter.notifyDataSetChanged()
+                if (!adapter.mLoading.isShowing) {
+                    intent?.let {
+                        var scanCode = intent.getStringExtra("SCAN_BARCODE1")
+
+                        //如果扫描到已经存在的单子直接进入 订单 验货界面
+                        var exist = -1
+                        if (adapter.data.size > 0) {
+                            for (i in adapter.data!!.indices) {
+                                val vm = adapter.data!![i]
+                                if (vm.code.value == scanCode) {
+                                    exist = i
+                                    break
+                                }
+                            }
+                        }
+                        if (exist >= 0) {
+                            view?.let { it1 -> adapter.itemOnClick(exist, it1) }
+                        } else {
+                            adapter.addOrder(scanCode)
+                        }
+                    }
                 }
             }else{
                 val t =

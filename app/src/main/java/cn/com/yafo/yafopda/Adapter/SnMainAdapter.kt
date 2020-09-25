@@ -1,6 +1,7 @@
 package cn.com.yafo.yafopda.Adapter
 
 import android.app.AlertDialog
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Toast
+import androidx.constraintlayout.widget.Constraints.TAG
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import cn.com.yafo.yafopda.BR
@@ -26,14 +28,17 @@ import org.json.JSONObject
 import java.io.IOException
 
 class SnMainAdapter(
-    private val data: MutableList<SnOrderVM>,
+    val data: MutableList<SnOrderVM>,
     var context: Context
 ) :
     BaseAdapter() {
 
     // 添加Loading cancle()是按返回键，Loading框关闭的回调，可以做取消加载请求的操作。
-    var mLoading: Loading
-    fun LoadingShow() {
+    var mLoading: Loading = object : Loading(context) {
+        override fun cancle() {}
+    }
+
+    private fun LoadingShow() {
         // 显示Loading
        mLoading.show()
     }
@@ -115,6 +120,7 @@ class SnMainAdapter(
                         order.dpt.postValue(o.getString("dpt"))
                         order.biz.postValue(o.getString("biz"))
                         order.storeCode.postValue(o.getString("storeCode"))
+                        order.note.postValue(o.getString("note"))
 
                         var jsonArray =o.getJSONArray("billDetails")
                         for ( i in 0 until jsonArray.length()){
@@ -125,6 +131,9 @@ class SnMainAdapter(
                                 orEntry.invcode.postValue(jsonObject.optString("invCode"))
                                 orEntry.invname.postValue(jsonObject.optString("invName"))
                                 orEntry.ncChkNum.postValue(jsonObject.optInt("ncChkNum"))
+                                orEntry.invclass.postValue(jsonObject.optString("invClass"))
+                                orEntry.barCode.postValue(jsonObject.optString("barCode"))
+                                orEntry.checkedNum.postValue(0)
 
                                 order.addorderEntry( orEntry )
                             }
@@ -146,7 +155,7 @@ class SnMainAdapter(
 //                        message.data = bundleData
 //                        handler.sendEmptyMessage(1)
                         //处理错误
-                        Log.d(CrashHandler.TAG, "OnResponse: " + response.body()?.string())
+                        Log.d("TAG", "OnResponse: " + response.body()?.string())
                     }
                     LoadingDismiss()
                 }
@@ -195,6 +204,10 @@ class SnMainAdapter(
         binding.snMainItemLayout.setOnClickListener(OnItemClickListener(position))
         //https://segmentfault.com/a/1190000008246487  binding.setVariable(variableId, data.get(position));
         return binding.root
+    }
+    fun itemOnClick(position:Int, convertView: View)
+    {
+        OnItemClickListener(position).onClick(convertView)
     }
 
     inner class OnDelClickListener(private val position: Int) : View.OnClickListener {
@@ -249,9 +262,4 @@ class SnMainAdapter(
 
     }
 
-    init {
-        mLoading = object : Loading(context) {
-            override fun cancle() {}
-        }
-    }
 }

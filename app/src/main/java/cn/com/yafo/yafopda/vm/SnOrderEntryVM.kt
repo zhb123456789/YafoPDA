@@ -5,10 +5,20 @@ import androidx.lifecycle.ViewModel
 
 
 class SnOrderEntryVM : ViewModel() {
+    private val _remainNum=MutableLiveData<Int>()
     var invcode= MutableLiveData<String>()
     var invname= MutableLiveData<String>()
     var invclass= MutableLiveData<String>()
+    var barCode= MutableLiveData<String>()
     var ncChkNum= MutableLiveData<Int>()
-    var checked_num= MutableLiveData<Int>()
+    var checkedNum= MutableLiveData<Int>()
+    //剩余数量
+    val  remainNum :MutableLiveData<Int>
+        get() {
+            _remainNum.value= ncChkNum.value!! - checkedNum.value!!
+            return  _remainNum
+        }
+
+
     var snList : MutableList<String> = mutableListOf()
 }

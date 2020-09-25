@@ -70,7 +70,7 @@ class SnOrderEntryAdapter(
             binding = DataBindingUtil.getBinding(convertView)
         }
         binding!!.setVariable(BR.sn, data.snList[position])
-        binding.snOrderEntryItemLayout .setOnClickListener(OnItemClickListener(position))
+        binding.snOrderEntryItemLayout.setOnClickListener(OnItemClickListener(position))
         //https://segmentfault.com/a/1190000008246487  binding.setVariable(variableId, data.get(position));
         return binding.root
     }
@@ -101,8 +101,6 @@ class SnOrderEntryAdapter(
                 val bundle = Bundle()
                 bundle.putInt("position", position)
 
-
-                // Toast.makeText(context,position, Toast.LENGTH_LONG).show();
                 notifyDataSetChanged() //刷新数据
 
             } catch (e: Exception) {
