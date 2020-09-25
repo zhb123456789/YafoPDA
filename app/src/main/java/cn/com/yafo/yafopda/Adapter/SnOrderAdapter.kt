@@ -9,7 +9,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.BaseAdapter
+import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
@@ -18,6 +20,7 @@ import cn.com.yafo.yafopda.databinding.SnOrderItemBinding
 import cn.com.yafo.yafopda.helper.BeeAndVibrateManager
 import cn.com.yafo.yafopda.vm.SnOrderEntryVM
 import kotlinx.android.synthetic.main.one_input_dialog.view.*
+import org.jetbrains.anko.sdk25.coroutines.onLongClick
 
 class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int,
                       var context: Context) : BaseAdapter() {
@@ -56,6 +59,10 @@ class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int
         binding!!.orderitem = data!![position] //BR. 此方法也可以
         //binding.button4.setOnClickListener(new OnBtnClickListener( position));
         binding.snOrderItemLayout.setOnClickListener(OnItemClickListener(position))
+        binding.snOrderItemLayout.setOnLongClickListener{
+            data!![position].barCode.value?.let { it1 -> checkInvNumByBarcode(it1) }
+            true
+        }
         return binding.root
     }
 
@@ -65,7 +72,7 @@ class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int
                 val bundle = Bundle()
                 bundle.putInt("positionOrder", po)
                 bundle.putInt("positionEntry", position)
-                if (data!![position].invclass.value=="打印机") {
+                if (data!![position].mainClass.value=="打印机") {
                     Navigation.findNavController(view)
                         .navigate(R.id.action_sn_order_fragment_to_sn_order_entry_fragment, bundle)
                 }
@@ -79,9 +86,10 @@ class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int
             }
         }
     }
+    //inner  class  OnItemLongClickListener
 
     fun checkInvNumByBarcode(barcode: String) {
-
+//todo 如果已经存在 数量录入框，那么直接 确认上一个输入框？
         var invFind=false
 
         for (i in data!!.indices) {
@@ -140,3 +148,5 @@ class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int
         }
     }
 }
+
+

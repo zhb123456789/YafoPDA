@@ -9,6 +9,7 @@ class SnOrderEntryVM : ViewModel() {
     var invcode= MutableLiveData<String>()
     var invname= MutableLiveData<String>()
     var invclass= MutableLiveData<String>()
+    var mainClass= MutableLiveData<String>()
     var barCode= MutableLiveData<String>()
     var ncChkNum= MutableLiveData<Int>()
     var checkedNum= MutableLiveData<Int>()

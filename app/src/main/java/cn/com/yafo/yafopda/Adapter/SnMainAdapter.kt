@@ -133,6 +133,7 @@ class SnMainAdapter(
                                 orEntry.ncChkNum.postValue(jsonObject.optInt("ncChkNum"))
                                 orEntry.invclass.postValue(jsonObject.optString("invClass"))
                                 orEntry.barCode.postValue(jsonObject.optString("barCode"))
+                                orEntry.mainClass.postValue(jsonObject.optString("mainClass"))
                                 orEntry.checkedNum.postValue(0)
 
                                 order.addorderEntry( orEntry )
@@ -226,7 +227,7 @@ class SnMainAdapter(
                 // 设置“确定”按钮,使用DialogInterface.OnClickListener接口参数
                 dialog.setPositiveButton(
                     "确定"
-                ) { dialog, which ->
+                ) { _, _ ->
                     Log.d("Dialog", "点击了“确认”按钮")
                     data.remove(data[position])
                     notifyDataSetChanged() //刷新数据
@@ -235,7 +236,7 @@ class SnMainAdapter(
                 // 设置“取消”按钮,使用DialogInterface.OnClickListener接口参数
                 dialog.setNegativeButton(
                     "取消"
-                ) { dialog, which -> Log.d("Dialog", "点击了“取消”按钮") }
+                ) { _, _ -> Log.d("Dialog", "点击了“取消”按钮") }
                 dialog.show()
                 notifyDataSetChanged() //刷新数据
             } catch (e: Exception) {
