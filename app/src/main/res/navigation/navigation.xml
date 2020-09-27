@@ -42,7 +42,7 @@
         android:id="@+id/sn_order_entry_fragment"
         android:name="cn.com.yafo.yafopda.SnOrderEntryFragment"
         android:label="sn_order_fragment"
-        tools:layout="@layout/sn_order_fragment" >
+        tools:layout="@layout/sn_order_entry_fragment" >
 
         <action
             android:id="@+id/action_sn_order_entry_fragment_to_sn_order_fragment"
