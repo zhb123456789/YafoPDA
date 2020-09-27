@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import cn.com.yafo.yafopda.Adapter.SnOrderAdapter
 import cn.com.yafo.yafopda.Adapter.SnOrderEntryAdapter
@@ -20,6 +21,8 @@ import cn.com.yafo.yafopda.databinding.SnOrderFragmentBinding
 import cn.com.yafo.yafopda.vm.SnMainFragmentVM
 import cn.com.yafo.yafopda.vm.SnOrderEntryVM
 import cn.com.yafo.yafopda.vm.SnOrderVM
+import kotlinx.android.synthetic.main.sn_order_entry_fragment.*
+import org.jetbrains.anko.support.v4.runOnUiThread
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,9 +56,15 @@ class SnOrderEntryFragment : Fragment() {
         var orderCode =vm.orderList[this!!.poOrder!!].code
         mBinding.orderEntry=orderEntry
         mBinding.orderCode=orderCode.value
+
+                //使用 MutableLiveData<String>() 单个属性
+        orderEntry.checkedNum.observe(viewLifecycleOwner, Observer {
+            // Update the UI when the data has changed
+            runOnUiThread { remainNum.text=orderEntry.remainNum.value.toString() }
+        })
         //定制Adapter 绑定List
         //orderEntry.snList.add( "123")
-        adapter = SnOrderEntryAdapter( orderEntry,  requireContext())
+        adapter = SnOrderEntryAdapter( orderEntry, requireContext())
         mBinding.adapter=adapter
         return mBinding.root;
     }
@@ -67,7 +76,7 @@ class SnOrderEntryFragment : Fragment() {
             if("ok" == scanStatus){
                 intent?.let {
                     adapter.addSnItem(intent.getStringExtra("SCAN_BARCODE1"))
-                    // adapter.notifyDataSetChanged()
+                    adapter.notifyDataSetChanged()
                 }
             }else{
                 val t =

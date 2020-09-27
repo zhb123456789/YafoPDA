@@ -2,6 +2,7 @@ package cn.com.yafo.yafopda.Adapter
 
 import android.content.Context
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,8 +80,28 @@ class SnOrderEntryAdapter(
     {
      if(snStr != null) {
          if (!data.snList.contains(snStr)) {
-             data.snList.add(snStr)
-             notifyDataSetChanged()
+             if (data.ncChkNum.value!! > data.checkedNum.value!!)
+             {
+                 data.snList.add(snStr)
+                 var checknum=data.checkedNum.value
+                 if (checknum == null) {
+                     checknum=1
+                 }
+                 else
+                 {checknum +=1 }
+                 data.checkedNum.postValue(checknum)
+
+                 notifyDataSetChanged()
+             }
+             else
+             {
+                 val t = Toast.makeText(context, "数量超出", Toast.LENGTH_LONG)
+                 t.setGravity(Gravity.TOP, 0, 0)
+                 t.show()
+                 BeeAndVibrateManager.playBeeAndVibrate(context,R.raw.warning ,100,null)
+
+             }
+
          }
          else
          {

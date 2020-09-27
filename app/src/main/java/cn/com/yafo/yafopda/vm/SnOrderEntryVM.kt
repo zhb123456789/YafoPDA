@@ -22,4 +22,5 @@ class SnOrderEntryVM : ViewModel() {
 
 
     var snList : MutableList<String> = mutableListOf()
+
 }
