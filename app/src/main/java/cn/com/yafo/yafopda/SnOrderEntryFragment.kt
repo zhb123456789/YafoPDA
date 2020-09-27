@@ -1,15 +1,10 @@
 package cn.com.yafo.yafopda
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.app.AlertDialog
+import android.content.*
 import android.os.Bundle
-import android.view.Gravity
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -21,6 +16,7 @@ import cn.com.yafo.yafopda.databinding.SnOrderFragmentBinding
 import cn.com.yafo.yafopda.vm.SnMainFragmentVM
 import cn.com.yafo.yafopda.vm.SnOrderEntryVM
 import cn.com.yafo.yafopda.vm.SnOrderVM
+import kotlinx.android.synthetic.main.one_input_dialog.view.*
 import kotlinx.android.synthetic.main.sn_order_entry_fragment.*
 import org.jetbrains.anko.support.v4.runOnUiThread
 
@@ -68,6 +64,9 @@ class SnOrderEntryFragment : Fragment() {
                     addSn.visibility= View.VISIBLE
             }
         })
+
+        mBinding.addSn.setOnClickListener(OnClickListener(orderEntry.invname.value.toString()))
+
         //定制Adapter 绑定List
         //orderEntry.snList.add( "123")
         adapter = SnOrderEntryAdapter( orderEntry, requireContext())
@@ -102,5 +101,38 @@ class SnOrderEntryFragment : Fragment() {
         super.onResume()
         // 注册广播：
         requireActivity().registerReceiver(receiver,  IntentFilter("nlscan.action.SCANNER_RESULT"));
+    }
+
+    inner class OnClickListener( var invname :String) : View.OnClickListener {
+        override fun onClick(view: View) {
+            try {
+
+                var builder = AlertDialog.Builder(context)
+                // 设置“确定”按钮,使用DialogInterface.OnClickListener接口参数
+                var dialogView = LayoutInflater.from(context)
+                    .inflate(R.layout.one_input_dialog, null);
+                builder.setPositiveButton(
+                    "确定"
+                ) { _, _ ->
+                    adapter.addSnItem(dialogView.edit_text.text.toString())
+                }
+                val dialog = builder.create()
+
+                dialog.setTitle("请输入SN");
+                dialog.setView(dialogView);
+                dialog.setMessage(invname)
+
+                dialogView.edit_text.setOnKeyListener { _, keyCode, event ->
+                    if (KeyEvent.KEYCODE_ENTER == keyCode && event.action == KeyEvent.ACTION_DOWN) {
+                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick()
+                        true
+                    }
+                    false
+                }
+                dialog.show()
+            } catch (e: Exception) {
+                Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show()
+            }
+        }
     }
 }
