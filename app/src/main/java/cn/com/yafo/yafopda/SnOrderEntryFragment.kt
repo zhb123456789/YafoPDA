@@ -60,7 +60,13 @@ class SnOrderEntryFragment : Fragment() {
                 //使用 MutableLiveData<String>() 单个属性
         orderEntry.checkedNum.observe(viewLifecycleOwner, Observer {
             // Update the UI when the data has changed
-            runOnUiThread { remainNum.text=orderEntry.remainNum.value.toString() }
+            runOnUiThread {
+                remainNum.text=orderEntry.remainNum.value.toString()
+                if(orderEntry.remainNum.value==0)
+                    addSn.visibility= View.GONE
+                else
+                    addSn.visibility= View.VISIBLE
+            }
         })
         //定制Adapter 绑定List
         //orderEntry.snList.add( "123")

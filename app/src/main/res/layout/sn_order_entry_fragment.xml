@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="android.view.View"/>
         <!--绑定数据类-->
         <variable
             name="orderEntry"
@@ -148,6 +149,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:layout_gravity="bottom"
+                    android:visibility="@{orderEntry.remainNum>0? View.VISIBLE : View.GONE}"
                     android:text="手工录入序列号SN" />
             </LinearLayout>
 
