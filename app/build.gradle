@@ -80,4 +80,6 @@ dependencies {
     //自动更新库 https://www.jianshu.com/p/e8449ea77280
     implementation 'cn.xiaoluo:update-manager:1.2.0'
 
+    implementation "com.google.code.gson:gson:2.8.5"
+
 }

@@ -79,7 +79,7 @@
                     android:id="@+id/customName"
                     android:layout_width="wrap_content"
                     android:layout_height="24dp"
-                    android:text="@{`客户：`+order.custname}"
+                    android:text="@{`客商：`+order.custName}"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
                 <LinearLayout

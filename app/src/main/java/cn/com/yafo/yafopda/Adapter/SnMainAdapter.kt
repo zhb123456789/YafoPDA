@@ -19,6 +19,7 @@ import cn.com.yafo.yafopda.BR
 import cn.com.yafo.yafopda.R
 import cn.com.yafo.yafopda.databinding.SnMainItemBinding
 import cn.com.yafo.yafopda.helper.CrashHandler
+import cn.com.yafo.yafopda.helper.GlobalVar.Companion.GetUrl
 import cn.com.yafo.yafopda.helper.Loading
 import cn.com.yafo.yafopda.vm.SnOrderEntryVM
 import cn.com.yafo.yafopda.vm.SnOrderVM
@@ -54,7 +55,7 @@ class SnMainAdapter(
         try {
             val client = OkHttpClient()
             val request = Request.Builder().get()
-                .url("http://193.111.99.63/api/PDA/GetBill?billcode=$orCode")
+                .url(GetUrl("/api/PDA/GetBill?billcode=$orCode"))
                 .build()
 
 
@@ -116,7 +117,7 @@ class SnMainAdapter(
                     if(response.code()==200) {
                         val o = JSONObject(response.body().string())
                         order.code.postValue(o.getString("billCode"))
-                        order.custname.postValue(o.getString("customer"))
+                        order.custName.postValue(o.getString("customer"))
                         order.dpt.postValue(o.getString("dpt"))
                         order.biz.postValue(o.getString("biz"))
                         order.storeCode.postValue(o.getString("storeCode"))
