@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModel
 import cn.com.yafo.yafopda.helper.GlobalVar
 import com.google.gson.Gson
 import okhttp3.*
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
 
 
 class SnOrderVM: ViewModel() {
 
-    var order = MutableLiveData<SnOrder>()
     var billCode = MutableLiveData<String>()
     var storName = MutableLiveData<String>()
     val custName = MutableLiveData<String>()
@@ -35,10 +35,14 @@ class SnOrderVM: ViewModel() {
         val JSON = MediaType.parse("application/json; charset=utf-8")
 
 
-        val json: String = Gson().toJson(this)
+        var json: String = Gson().toJson(this)
         val jsonObject = JSONObject(json)
-        jsonObject.remove("mActiveCount")
+        //jsonObject.remove("mActiveCount")
         //jsonObject.keySet().removeIf({ k -> !k.equals("a") })
+
+        travelLiJSONObject(jsonObject)
+
+        json =jsonObject.toString()
 
 
         val requestBody = RequestBody.create(JSON, json.toString())
@@ -60,18 +64,59 @@ class SnOrderVM: ViewModel() {
         })
 
     }
+    fun travelLiJSONObject(originalJSONObject: JSONObject) {
+
+        originalJSONObject.remove("mBagOfTags")
+        originalJSONObject.remove("mCleared")
+        for (key in originalJSONObject.keys()) {    // 最外层的key
+
+            val value = originalJSONObject[key]
+
+            if (value is JSONObject) {
+//                value.remove("mActiveCount")
+//                value.remove("mDataLock")
+//                value.remove("mDispatchInvalidated")
+//                value.remove("mDispatchingValue")
+//                value.remove("mObservers")
+//                value.remove("mPendingData")
+//                value.remove("mVersion")
+                //修改JSONObject 的值为  mData
+                var v= value["mData"]
+                if(v.toString()=="{}")
+                    v=""
+                originalJSONObject.put(key, v.toString())
+                continue
+            }
+            if (value is JSONArray) {
+                //(json数组)")
+
+                if (value.length()==0) {
+                    continue
+                } else {
+                    for (i in 0 until value.length()) {
+                        if(value[i] is JSONObject) {
+                            val o1 = value.getJSONObject(i)
+                            travelLiJSONObject(o1)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
 }
-class SnOrder(){
+class SnOrderVo(){
     var billCode:String=""
     var storName :String=""
-    val custName:String=""
-    val dpt :String=""
-    val biz :String=""
-    val provider :String=""
-    val billType :String=""
-    val storeCode :String=""
-    val nchpk :String=""
-    val chkOutTime :String=""
-    val note :String=""
+    var custName:String=""
+    var dpt :String=""
+    var biz :String=""
+    var provider :String=""
+    var billType :String=""
+    var storeCode :String=""
+    var nchpk :String=""
+    var chkOutTime :String=""
+    var note :String=""
 
 }
