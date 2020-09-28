@@ -43,7 +43,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="@{`单号：`+order.code}"
+                        android:text="@{`单号：`+order.billCode}"
                         android:textColor="@android:color/black"
                         android:textSize="18sp" />
                     <Space
@@ -107,7 +107,7 @@
                                 android:id="@+id/biz"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{` 业务：`+order.biz}"
+                                android:text="@{` 业务：`+order.order.biz}"
                                 android:textColor="@android:color/tab_indicator_text"
                                 android:textSize="14sp" />
                         </LinearLayout>
@@ -131,6 +131,7 @@
                         android:layout_height="60dp"
                         android:layout_gravity="right"
                         android:background="#FFFFFF"
+                        android:onClick="@{()->order.submitOrder()}"
                         android:text="提交"
                         android:textSize="18sp"
                         android:textStyle="bold" />

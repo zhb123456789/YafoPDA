@@ -116,7 +116,7 @@ class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int
                 dialog.setTitle("请输入数量");
                 dialog.setView(dialogView);
                 // dialog.setIcon(R.drawable.dictation2_64);
-                dialog.setMessage(vm.invname.value)
+                dialog.setMessage(vm.invName.value)
                 dialogView.edit_text.setText("1")
                 Selection.selectAll(dialogView.edit_text.text);
 

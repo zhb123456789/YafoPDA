@@ -109,7 +109,7 @@ class SnMainFragment : Fragment() {
                         if (adapter.data.size > 0) {
                             for (i in adapter.data!!.indices) {
                                 val vm = adapter.data!![i]
-                                if (vm.code.value == scanCode) {
+                                if (vm.billCode.value == scanCode) {
                                     exist = i
                                     break
                                 }

@@ -10,8 +10,9 @@ import java.io.IOException
 
 
 class SnOrderVM: ViewModel() {
-    var code = MutableLiveData<String>()
-    var orderCode = MutableLiveData<String>()
+
+    var order = MutableLiveData<SnOrder>()
+    var billCode = MutableLiveData<String>()
     var storName = MutableLiveData<String>()
     val custName = MutableLiveData<String>()
     val dpt = MutableLiveData<String>()
@@ -34,7 +35,11 @@ class SnOrderVM: ViewModel() {
         val JSON = MediaType.parse("application/json; charset=utf-8")
 
 
-        val json: String = Gson().toJson(Gson().toJson(this))
+        val json: String = Gson().toJson(this)
+        val jsonObject = JSONObject(json)
+        jsonObject.remove("mActiveCount")
+        //jsonObject.keySet().removeIf({ k -> !k.equals("a") })
+
 
         val requestBody = RequestBody.create(JSON, json.toString())
 
@@ -55,4 +60,18 @@ class SnOrderVM: ViewModel() {
         })
 
     }
+}
+class SnOrder(){
+    var billCode:String=""
+    var storName :String=""
+    val custName:String=""
+    val dpt :String=""
+    val biz :String=""
+    val provider :String=""
+    val billType :String=""
+    val storeCode :String=""
+    val nchpk :String=""
+    val chkOutTime :String=""
+    val note :String=""
+
 }

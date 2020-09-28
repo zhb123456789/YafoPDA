@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 
 class SnOrderEntryVM : ViewModel() {
     private val _remainNum=MutableLiveData<Int>()
-    var invcode= MutableLiveData<String>()
-    var invname= MutableLiveData<String>()
-    var invclass= MutableLiveData<String>()
+    var invCode= MutableLiveData<String>()
+    var invName= MutableLiveData<String>()
+    var invClass= MutableLiveData<String>()
     var mainClass= MutableLiveData<String>()
     var barCode= MutableLiveData<String>()
     var ncChkNum= MutableLiveData<Int>()

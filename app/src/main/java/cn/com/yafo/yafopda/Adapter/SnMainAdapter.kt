@@ -116,8 +116,9 @@ class SnMainAdapter(
                 override fun onResponse(call: Call, response: Response) {
                     if(response.code()==200) {
                         val o = JSONObject(response.body().string())
-                        order.code.postValue(o.getString("billCode"))
-                        order.custName.postValue(o.getString("customer"))
+                       // order.order.value.code.
+                        order.billCode.postValue(o.getString("billCode"))
+                        order.custName.postValue(o.getString("custName"))
                         order.dpt.postValue(o.getString("dpt"))
                         order.biz.postValue(o.getString("biz"))
                         order.storeCode.postValue(o.getString("storeCode"))
@@ -129,10 +130,10 @@ class SnMainAdapter(
                             if (jsonObject != null) {
 
                                 var orEntry=SnOrderEntryVM()
-                                orEntry.invcode.postValue(jsonObject.optString("invCode"))
-                                orEntry.invname.postValue(jsonObject.optString("invName"))
+                                orEntry.invCode.postValue(jsonObject.optString("invCode"))
+                                orEntry.invName.postValue(jsonObject.optString("invName"))
                                 orEntry.ncChkNum.postValue(jsonObject.optInt("ncChkNum"))
-                                orEntry.invclass.postValue(jsonObject.optString("invClass"))
+                                orEntry.invClass.postValue(jsonObject.optString("invClass"))
                                 orEntry.barCode.postValue(jsonObject.optString("barCode"))
                                 orEntry.mainClass.postValue(jsonObject.optString("mainClass"))
                                 orEntry.checkedNum.postValue(0)

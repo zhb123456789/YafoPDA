@@ -29,7 +29,7 @@
                     android:id="@+id/invname"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
-                    android:text="@{orderitem.invname}"
+                    android:text="@{orderitem.invName}"
                     android:paddingBottom="5px"
                     android:textColor="#666"
                     android:textStyle="bold"
@@ -49,7 +49,7 @@
                         android:id="@+id/invclass"
                         android:layout_width="80dp"
                         android:layout_height="24dp"
-                        android:text="@{orderitem.invclass}"
+                        android:text="@{orderitem.invClass}"
                         android:textColor="#999"
                         android:textSize="14sp"/>
                     <TextView
@@ -57,7 +57,7 @@
                         android:layout_width="80dp"
                         android:layout_height="24dp"
                         android:layout_toEndOf="@id/invname"
-                        android:text="@{orderitem.invcode}"
+                        android:text="@{orderitem.invCode}"
                         android:textColor="#999"
                         android:layout_marginStart="@dimen/txt_middle_size"
                         android:textSize="14sp"/>
