@@ -1,10 +1,15 @@
 package cn.com.yafo.yafopda
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,10 +18,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import cn.com.yafo.yafopda.Adapter.SnOrderAdapter
 import cn.com.yafo.yafopda.databinding.SnOrderFragmentBinding
+import cn.com.yafo.yafopda.helper.Loading
 import cn.com.yafo.yafopda.vm.SnMainFragmentVM
 import cn.com.yafo.yafopda.vm.SnOrderVM
+import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.json.JSONObject
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,17 +39,73 @@ class SnOrderFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var po: Int? = null
     lateinit var adapter:SnOrderAdapter
+    lateinit var vm:SnMainFragmentVM
+    lateinit var mLoading: Loading
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             po = it.getInt(position)
         }
+
+    }
+
+
+    private val handler : Handler = @SuppressLint("HandlerLeak")
+    object : Handler(){
+        override fun handleMessage(msg: Message?) {
+            super.handleMessage(msg)
+            when(msg?.what){
+                200 ->{
+                    try {
+                        po?.let { vm.orderList.removeAt(it) }
+                        Toast.makeText(context, "提交成功", Toast.LENGTH_LONG).show()
+                        mLoading.dismiss()
+                        view?.let {
+                            Navigation.findNavController(it)
+                                .navigate(R.id.action_snOrderFragment_to_snMainFragment, null)
+                        }
+                    } catch (ex : Throwable){
+                        Toast.makeText(context, ex.message, Toast.LENGTH_LONG).show()
+                        ex.printStackTrace()
+                    }
+                }
+                500 -> {
+                    val dialog = AlertDialog.Builder(context)
+                    dialog.setTitle("错误:${msg?.what}")
+                    if (msg != null) {
+                        val o = JSONObject(msg.obj.toString())
+
+                        dialog.setMessage(o.getString("exceptionMessage"))
+                    }
+                    dialog.setCancelable(true)
+                    dialog.show()
+                    mLoading.dismiss()
+                }
+                else -> {
+                    // 1、创建简单的AlertDialog https://www.cnblogs.com/jiayongji/p/5371996.html
+                    val dialog = AlertDialog.Builder(context)
+
+                    // (2)设置各种属性 // 注：不设置哪项属性，这个属性就默认不会显示出来
+                    dialog.setTitle("服务器错误:${msg?.what}")
+                    if (msg != null) {
+                        dialog.setMessage(msg.obj.toString())
+                    }
+
+                    // (3)设置dialog可否被取消
+                    dialog.setCancelable(true)
+
+                    // (4)显示出来
+                    dialog.show()
+                    mLoading.dismiss()
+                }
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        var vm= ViewModelProvider(this.requireActivity()).get(SnMainFragmentVM::class.java) // 关键代码
+        vm= ViewModelProvider(this.requireActivity()).get(SnMainFragmentVM::class.java) // 关键代码
         var mBinding: SnOrderFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.sn_order_fragment,container,false)
         var order =vm.orderList[this!!.po!!]
         mBinding.order=order
@@ -48,11 +113,49 @@ class SnOrderFragment : Fragment() {
         adapter = SnOrderAdapter( order.orderEntrys,this!!.po!!, requireContext())
         mBinding.adapter=adapter
 
-//
-//        var item = SnOrderEntryVM()
-//        item.invcode.value="111"
-//        item.invname.value="vvvv"
-//        order.addDetail(item,adapter)
+        mLoading = object : Loading(context) {
+            override fun cancle() {}
+        }
+        mBinding.buttonSubmit.onClick {
+            var isCheckOver=true
+            //检查是否验货完成
+            for (item in order.orderEntrys)
+            {
+                if (item.remainNum.value!! >0)
+                {
+                    isCheckOver=false
+                    break
+                }
+            }
+            if (isCheckOver) {
+                mLoading.show()
+                order.submitOrder(handler)
+            }
+            else
+            {
+                //提示确认
+                val dialog =
+                    AlertDialog.Builder(context)
+                dialog.setTitle("确认")
+                // dialog.setIcon(R.drawable.dictation2_64);
+                dialog.setMessage("该订单为验货完成，是否提交？")
+
+                // 设置“确定”按钮,使用DialogInterface.OnClickListener接口参数
+                dialog.setPositiveButton(
+                    "确定"
+                ) { _, _ ->
+                    mLoading.show()
+                    order.submitOrder(handler)
+                    Log.d("Dialog", "点击了“确认”按钮")
+                }
+
+                // 设置“取消”按钮,使用DialogInterface.OnClickListener接口参数
+                dialog.setNegativeButton(
+                    "取消"
+                ) { _, _ -> Log.d("Dialog", "点击了“取消”按钮") }
+                dialog.show()
+            }
+        }
 
         return mBinding.root;
     }
@@ -68,11 +171,11 @@ class SnOrderFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic fun newInstance(param1: String, param2: String) =
-                SnOrderFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(position, param1)
-                    }
+            SnOrderFragment().apply {
+                arguments = Bundle().apply {
+                    putString(position, param1)
                 }
+            }
     }
 
     //接收扫码数据

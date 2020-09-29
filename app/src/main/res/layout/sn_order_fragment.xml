@@ -126,12 +126,11 @@
                         android:layout_weight="1" />
 
                     <Button
-                        android:id="@+id/button"
+                        android:id="@+id/buttonSubmit"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_gravity="right"
                         android:background="#FFFFFF"
-                        android:onClick="@{()->order.submitOrder()}"
                         android:text="提交"
                         android:textSize="18sp"
                         android:textStyle="bold" />

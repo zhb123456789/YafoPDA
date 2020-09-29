@@ -1,5 +1,8 @@
 package cn.com.yafo.yafopda.vm
 
+import android.os.Handler
+import android.os.Message
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import cn.com.yafo.yafopda.helper.GlobalVar
@@ -30,7 +33,7 @@ class SnOrderVM: ViewModel() {
     fun addorderEntry(orderEntry: SnOrderEntryVM) {
         orderEntrys.add(orderEntry)
     }
-    fun submitOrder()
+    fun submitOrder(handler : Handler)
     {
         val client = OkHttpClient()
         val JSON = MediaType.parse("application/json; charset=utf-8")
@@ -47,17 +50,31 @@ class SnOrderVM: ViewModel() {
         val requestBody = RequestBody.create(JSON, json.toString())
 
         var builder = Request.Builder()
-        builder.url(GlobalVar.GetUrl("/api/PDA/GetBill?billcode=$"))
+        builder.url(GlobalVar.GetUrl("/api/PDA/GetBill?billcode=CR2007160034"))
         builder.addHeader("Content-Type","application/json")
             .post(requestBody)
 
         client.newCall(builder.build()).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                println("————失败了$e")
+                Log.d("UPDATE", "onFailure: $e")
             }
             override fun onResponse(call: Call, response: Response) {
-                var stA = response.body()!!.string()
-                println("————成功 $stA")
+                if(response.code()==200) {
+                    handler.sendEmptyMessage(200)
+                } else
+                {
+                    val message = Message.obtain()
+                    message.obj = response.body().string()
+                    message.what = response.code()
+                    handler.sendMessage(message)
+                    //传递复杂类型的消息
+//                        val bundleData = Bundle()
+//                        bundleData.putString("Name", "Lucy")
+//                        message.data = bundleData
+//                        handler.sendEmptyMessage(1)
+                    //处理错误
+                    Log.d("TAG", "OnResponse: " + response.body()?.string())
+                }
 
             }
         })
