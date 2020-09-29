@@ -3,6 +3,7 @@ package cn.com.yafo.yafopda.vm
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import cn.com.yafo.yafopda.helper.GlobalVar
+import cn.com.yafo.yafopda.helper.JSONHelper
 import com.google.gson.Gson
 import okhttp3.*
 import org.json.JSONArray
@@ -37,10 +38,8 @@ class SnOrderVM: ViewModel() {
 
         var json: String = Gson().toJson(this)
         val jsonObject = JSONObject(json)
-        //jsonObject.remove("mActiveCount")
-        //jsonObject.keySet().removeIf({ k -> !k.equals("a") })
 
-        travelLiJSONObject(jsonObject)
+        JSONHelper.travelLiJSONObject(jsonObject)
 
         json =jsonObject.toString()
 
@@ -64,59 +63,7 @@ class SnOrderVM: ViewModel() {
         })
 
     }
-    fun travelLiJSONObject(originalJSONObject: JSONObject) {
-
-        originalJSONObject.remove("mBagOfTags")
-        originalJSONObject.remove("mCleared")
-        for (key in originalJSONObject.keys()) {    // 最外层的key
-
-            val value = originalJSONObject[key]
-
-            if (value is JSONObject) {
-//                value.remove("mActiveCount")
-//                value.remove("mDataLock")
-//                value.remove("mDispatchInvalidated")
-//                value.remove("mDispatchingValue")
-//                value.remove("mObservers")
-//                value.remove("mPendingData")
-//                value.remove("mVersion")
-                //修改JSONObject 的值为  mData
-                var v= value["mData"]
-                if(v.toString()=="{}")
-                    v=""
-                originalJSONObject.put(key, v.toString())
-                continue
-            }
-            if (value is JSONArray) {
-                //(json数组)")
-
-                if (value.length()==0) {
-                    continue
-                } else {
-                    for (i in 0 until value.length()) {
-                        if(value[i] is JSONObject) {
-                            val o1 = value.getJSONObject(i)
-                            travelLiJSONObject(o1)
-                        }
-                    }
-                }
-            }
-        }
-    }
 
 
-}
-class SnOrderVo(){
-    var billCode:String=""
-    var storName :String=""
-    var custName:String=""
-    var dpt :String=""
-    var biz :String=""
-    var provider :String=""
-    var billType :String=""
-    var storeCode :String=""
-    var nchpk :String=""
-    var chkOutTime :String=""
-    var note :String=""
 
 }
