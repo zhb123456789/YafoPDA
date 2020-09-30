@@ -27,60 +27,24 @@ class SnOrderVM: ViewModel() {
     val nchpk = MutableLiveData<String>()
     val chkOutTime = MutableLiveData<String>()
     val note = MutableLiveData<String>()
+    var compelCommit =false
+    var isCheckOver=false
+        get() {
+            //检查是否验货完成
+            for (item in orderEntrys)
+            {
+                if (item.remainNum.value!! >0)
+                {
+                    return  false
+                }
+            }
+            return true
+        }
 
     var orderEntrys: MutableList<SnOrderEntryVM> = mutableListOf()
 
     fun addorderEntry(orderEntry: SnOrderEntryVM) {
         orderEntrys.add(orderEntry)
     }
-    fun submitOrder(handler : Handler)
-    {
-        val client = OkHttpClient()
-        val JSON = MediaType.parse("application/json; charset=utf-8")
-
-
-        var json: String = Gson().toJson(this)
-        val jsonObject = JSONObject(json)
-
-        JSONHelper.travelLiJSONObject(jsonObject)
-
-        json =jsonObject.toString()
-
-
-        val requestBody = RequestBody.create(JSON, json.toString())
-
-        var builder = Request.Builder()
-        builder.url(GlobalVar.GetUrl("/api/PDA/GetBill?billcode=CR2007160034"))
-        builder.addHeader("Content-Type","application/json")
-            .post(requestBody)
-
-        client.newCall(builder.build()).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Log.d("UPDATE", "onFailure: $e")
-            }
-            override fun onResponse(call: Call, response: Response) {
-                if(response.code()==200) {
-                    handler.sendEmptyMessage(200)
-                } else
-                {
-                    val message = Message.obtain()
-                    message.obj = response.body().string()
-                    message.what = response.code()
-                    handler.sendMessage(message)
-                    //传递复杂类型的消息
-//                        val bundleData = Bundle()
-//                        bundleData.putString("Name", "Lucy")
-//                        message.data = bundleData
-//                        handler.sendEmptyMessage(1)
-                    //处理错误
-                    Log.d("TAG", "OnResponse: " + response.body()?.string())
-                }
-
-            }
-        })
-
-    }
-
-
 
 }

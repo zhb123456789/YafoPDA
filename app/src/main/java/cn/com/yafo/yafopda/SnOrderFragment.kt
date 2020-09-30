@@ -21,11 +21,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import cn.com.yafo.yafopda.Adapter.SnOrderAdapter
 import cn.com.yafo.yafopda.databinding.SnOrderFragmentBinding
+import cn.com.yafo.yafopda.helper.GlobalVar
+import cn.com.yafo.yafopda.helper.JSONHelper
 import cn.com.yafo.yafopda.helper.Loading
 import cn.com.yafo.yafopda.vm.SnMainFragmentVM
 import cn.com.yafo.yafopda.vm.SnOrderVM
+import com.google.gson.Gson
+import okhttp3.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.json.JSONObject
+import java.io.IOException
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,6 +46,7 @@ class SnOrderFragment : Fragment() {
     lateinit var adapter:SnOrderAdapter
     lateinit var vm:SnMainFragmentVM
     lateinit var mLoading: Loading
+    lateinit var order:SnOrderVM
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +61,8 @@ class SnOrderFragment : Fragment() {
     object : Handler(){
         override fun handleMessage(msg: Message?) {
             super.handleMessage(msg)
-            when(msg?.what){
+            when(msg?.what)
+            {
                 200 ->{
                     try {
                         po?.let { vm.orderList.removeAt(it) }
@@ -70,7 +77,33 @@ class SnOrderFragment : Fragment() {
                         ex.printStackTrace()
                     }
                 }
-                500 -> {
+                400->
+                {
+                    //提示确认
+                    val dialog =
+                        AlertDialog.Builder(context)
+                    dialog.setTitle("确认")
+                    // dialog.setIcon(R.drawable.dictation2_64);
+                    dialog.setMessage("该订单没有完成验货，是否提交？")
+
+                    // 设置“确定”按钮,使用DialogInterface.OnClickListener接口参数
+                    dialog.setPositiveButton(
+                        "确定"
+                    ) { _, _ ->
+                        mLoading.show()
+                        order.compelCommit=true
+                        submitOrder(order)
+                        Log.d("Dialog", "点击了“确认”按钮")
+                    }
+
+                    // 设置“取消”按钮,使用DialogInterface.OnClickListener接口参数
+                    dialog.setNegativeButton(
+                        "取消"
+                    ) { _, _ -> Log.d("Dialog", "点击了“取消”按钮") }
+                    dialog.show()
+                }
+                500 ->
+                {
                     val dialog = AlertDialog.Builder(context)
                     dialog.setTitle("错误:${msg?.what}")
                     if (msg != null) {
@@ -107,7 +140,7 @@ class SnOrderFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         vm= ViewModelProvider(this.requireActivity()).get(SnMainFragmentVM::class.java) // 关键代码
         var mBinding: SnOrderFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.sn_order_fragment,container,false)
-        var order =vm.orderList[this!!.po!!]
+        order =vm.orderList[this!!.po!!]
         mBinding.order=order
         //定制Adapter 绑定List
         adapter = SnOrderAdapter( order.orderEntrys,this!!.po!!, requireContext())
@@ -117,19 +150,10 @@ class SnOrderFragment : Fragment() {
             override fun cancle() {}
         }
         mBinding.buttonSubmit.onClick {
-            var isCheckOver=true
-            //检查是否验货完成
-            for (item in order.orderEntrys)
-            {
-                if (item.remainNum.value!! >0)
-                {
-                    isCheckOver=false
-                    break
-                }
-            }
-            if (isCheckOver) {
+
+            if (order.isCheckOver) {
                 mLoading.show()
-                order.submitOrder(handler)
+                submitOrder(order)
             }
             else
             {
@@ -138,14 +162,14 @@ class SnOrderFragment : Fragment() {
                     AlertDialog.Builder(context)
                 dialog.setTitle("确认")
                 // dialog.setIcon(R.drawable.dictation2_64);
-                dialog.setMessage("该订单为验货完成，是否提交？")
+                dialog.setMessage("该订单没有完成验货，是否提交？")
 
                 // 设置“确定”按钮,使用DialogInterface.OnClickListener接口参数
                 dialog.setPositiveButton(
                     "确定"
                 ) { _, _ ->
                     mLoading.show()
-                    order.submitOrder(handler)
+                    submitOrder(order)
                     Log.d("Dialog", "点击了“确认”按钮")
                 }
 
@@ -177,6 +201,7 @@ class SnOrderFragment : Fragment() {
                 }
             }
     }
+    //检查单据是否已经提交过
 
     //接收扫码数据
     private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
@@ -195,6 +220,54 @@ class SnOrderFragment : Fragment() {
             }
 
         }
+    }
+
+    fun submitOrder(order:SnOrderVM)
+    {
+        val client = OkHttpClient()
+        val JSON = MediaType.parse("application/json; charset=utf-8")
+
+
+        var json: String = Gson().toJson(order)
+        val jsonObject = JSONObject(json)
+
+        JSONHelper.travelLiJSONObject(jsonObject)
+
+        json =jsonObject.toString()
+
+
+        val requestBody = RequestBody.create(JSON, json.toString())
+
+        var builder = Request.Builder()
+        builder.url(GlobalVar.GetUrl("/api/PDA/AddCheckBill?compelCommit=${order.compelCommit}"))
+        builder.addHeader("Content-Type","application/json")
+            .post(requestBody)
+
+        client.newCall(builder.build()).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.d("UPDATE", "onFailure: $e")
+            }
+            override fun onResponse(call: Call, response: Response) {
+                if(response.code()==200) {
+                    handler.sendEmptyMessage(200)
+                } else
+                {
+                    val message = Message.obtain()
+                    message.obj = response.body().string()
+                    message.what = response.code()
+                    handler.sendMessage(message)
+                    //传递复杂类型的消息
+//                        val bundleData = Bundle()
+//                        bundleData.putString("Name", "Lucy")
+//                        message.data = bundleData
+//                        handler.sendEmptyMessage(1)
+                    //处理错误
+                    Log.d("TAG", "OnResponse: " + response.body()?.string())
+                }
+
+            }
+        })
+
     }
 
     override fun onPause() {
