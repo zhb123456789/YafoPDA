@@ -110,6 +110,10 @@ class SnMainAdapter(
             call.enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     Log.d("UPDATE", "onFailure: $e")
+                    val message = Message.obtain()
+                    message.obj = e
+                    message.what = 501
+                    handler.sendMessage(message)
                 }
 
                 @Throws(IOException::class)

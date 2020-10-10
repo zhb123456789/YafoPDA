@@ -236,16 +236,21 @@ class SnOrderFragment : Fragment() {
         json =jsonObject.toString()
 
 
-        val requestBody = RequestBody.create(JSON, json.toString())
+        val requestBody = RequestBody.create(JSON, json)
+
 
         var builder = Request.Builder()
-        builder.url(GlobalVar.GetUrl("/api/PDA/AddCheckBill?compelCommit=${order.compelCommit}"))
+        builder.url(GlobalVar.GetUrl("/api/PDA/AddCheckBill?forceCommit=${order.compelCommit}"))
         builder.addHeader("Content-Type","application/json")
             .post(requestBody)
 
         client.newCall(builder.build()).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                Log.d("UPDATE", "onFailure: $e")
+                Log.d("submitOrder", "onFailure: $e")
+                val message = Message.obtain()
+                message.obj = e
+                message.what = 501
+                handler.sendMessage(message)
             }
             override fun onResponse(call: Call, response: Response) {
                 if(response.code()==200) {
