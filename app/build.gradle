@@ -75,7 +75,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //版本要与gradle版本一致
-    kapt  "com.android.databinding:compiler:3.5.0"
+    kapt "com.android.databinding:compiler:3.5.0"
 
     //自动更新库 https://www.jianshu.com/p/e8449ea77280
     implementation 'cn.xiaoluo:update-manager:1.2.0'

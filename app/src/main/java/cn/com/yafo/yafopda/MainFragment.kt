@@ -56,10 +56,26 @@ class MainFragment : Fragment() {
                 controller.navigate(R.id.action_main_to_SN)
             }
         })
+        mBinding.btnBox.setOnClickListener(View.OnClickListener { v ->
+            navigation(R.id.action_mainFragment_to_box_fragment,v)
+        })
 
 
         return mBinding.root;
 
+    }
+    fun navigation(resId:Int,v:View)
+    {
+        if (GlobalVar.userVM.username.value == null)
+        { val t =
+            Toast.makeText(context, "请先填写用户名或编码", Toast.LENGTH_LONG)
+            t.setGravity(Gravity.TOP, 0, 0)
+            t.show()
+        }
+        else {
+            val controller = Navigation.findNavController(v)
+            controller.navigate(resId)
+        }
     }
 
 }

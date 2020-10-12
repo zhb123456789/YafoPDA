@@ -67,13 +67,12 @@
                     android:orientation="vertical">
 
                     <Button
-                        android:id="@+id/btnCheck"
+                        android:id="@+id/btnStockCount"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/button_circle_shape"
                         android:fontFamily="sans-serif-medium"
-                        android:text="@={user.username}"
                         android:textSize="24sp"></Button>
 
                     <TextView
@@ -92,12 +91,12 @@
                     android:orientation="vertical">
 
                     <Button
+                        android:id="@+id/btnPicking"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/button_circle_shape"
                         android:fontFamily="sans-serif-medium"
-                        android:text="@={user.username}"
                         android:textSize="24sp" />
 
                     <TextView
@@ -106,7 +105,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="11dp"
                         android:gravity="center_horizontal"
-                        android:text="移库" />
+                        android:text="拣货" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -126,7 +125,6 @@
                         android:id="@+id/btnBox"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:onClick="@{()->user.btnBoxOnClick()}"
                         android:text="装箱"
                         android:textSize="24sp"
                         android:layout_gravity="center_horizontal"
