@@ -226,6 +226,7 @@ class SnOrderFragment : Fragment() {
 
     fun submitOrder(order:SnOrderVM)
     {
+        order.operator.value=GlobalVar.userVM.username.value
         val client = ClientBuilder.plainClient
         val JSON = MediaType.parse("application/json; charset=utf-8")
 
