@@ -50,7 +50,7 @@ class SnOrderEntryFragment : Fragment() {
         mBinding.orderCode=orderCode.value
 
                 //使用 MutableLiveData<String>() 单个属性
-        orderEntry.checkedNum.observe(viewLifecycleOwner, Observer {
+        orderEntry.pdaChkNum.observe(viewLifecycleOwner, Observer {
             // Update the UI when the data has changed
             runOnUiThread {
                 remainNum.text=orderEntry.remainNum.value.toString()

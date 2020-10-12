@@ -7,14 +7,15 @@ import androidx.lifecycle.ViewModel
 class SnOrderVM: ViewModel() {
 
     var billCode = MutableLiveData<String>()
+    var billDate = MutableLiveData<String>()
+    val billType = MutableLiveData<String>()
     var storName = MutableLiveData<String>()
     val custName = MutableLiveData<String>()
     val dpt = MutableLiveData<String>()
+    val nchpk = MutableLiveData<String>()
     val biz = MutableLiveData<String>()
     val provider = MutableLiveData<String>()
-    val billType = MutableLiveData<String>()
     val storeCode = MutableLiveData<String>()
-    val nchpk = MutableLiveData<String>()
     val chkOutTime = MutableLiveData<String>()
     val note = MutableLiveData<String>()
     var compelCommit =false

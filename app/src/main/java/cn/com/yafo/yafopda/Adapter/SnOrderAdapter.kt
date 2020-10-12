@@ -1,7 +1,6 @@
 package cn.com.yafo.yafopda.Adapter
 
 import android.app.AlertDialog
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
@@ -141,13 +140,13 @@ class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int
 
     private fun doCheckBox(dialogView: View, vm: SnOrderEntryVM) {
         var num = dialogView.edit_text.text.toString().toInt()
-        var checknum = vm.checkedNum.value
+        var checknum = vm.pdaChkNum.value
         if (checknum == null) {
             checknum = 0
         }
         checknum += num
         if (checknum <= vm.ncChkNum.value!!) {
-            vm.checkedNum.value = checknum
+            vm.pdaChkNum.value = checknum
         } else {
             Toast.makeText(context, "应捡数量超出！", Toast.LENGTH_LONG).show()
             BeeAndVibrateManager.playBeeAndVibrate(context, R.raw.warning, 1000, null)

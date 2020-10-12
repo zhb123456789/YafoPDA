@@ -4,14 +4,12 @@ import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.Navigation
 import cn.com.yafo.yafopda.BR
 import cn.com.yafo.yafopda.R
 import cn.com.yafo.yafopda.databinding.SnOrderEntryItemBinding
@@ -82,10 +80,10 @@ class SnOrderEntryAdapter(
     {
      if(snStr != null) {
          if (!data.snList.contains(snStr)) {
-             if (data.ncChkNum.value!! > data.checkedNum.value!!)
+             if (data.ncChkNum.value!! > data.pdaChkNum.value!!)
              {
                  data.snList.add(snStr)
-                 data.checkedNum.postValue(data.snList.size)
+                 data.pdaChkNum.postValue(data.snList.size)
 
                  notifyDataSetChanged()
              }
@@ -130,7 +128,7 @@ class SnOrderEntryAdapter(
                 ) { _, _ ->
                     Log.d("Dialog", "点击了“确认”按钮")
                     data.snList.remove(data.snList[position])
-                    data.checkedNum.postValue(data.snList.size)
+                    data.pdaChkNum.postValue(data.snList.size)
                     notifyDataSetChanged() //刷新数据
                 }
 

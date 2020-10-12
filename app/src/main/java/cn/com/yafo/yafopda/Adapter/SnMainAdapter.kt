@@ -117,12 +117,19 @@ class SnMainAdapter(
                 override fun onResponse(call: Call, response: Response) {
                     if(response.code()==200) {
                         try {
+//                            val gson = Gson()
+//                            val newsResponse = gson.fromJson(response.body().string(), SnOrderVM::class.java)
+
                             val o = JSONObject(response.body().string())
                             // order.order.value.code.
                             order.billCode.postValue(o.getString("billCode"))
-                            order.custName.postValue(o.getString("custName"))
-                            order.dpt.postValue(o.getString("dpt"))
+                            order.billDate.postValue(o.getString("billDate"))
+                            order.billType.postValue(o.getString("billType"))
                             order.biz.postValue(o.getString("biz"))
+                            order.chkOutTime.postValue(o.getString("chkOutTime"))
+                            order.custName.postValue(o.getString("custName"))
+                            order.nchpk.postValue(o.getString("nchpk"))
+                            order.dpt.postValue(o.getString("dpt"))
                             order.storeCode.postValue(o.getString("storeCode"))
                             order.note.postValue(o.getString("note"))
 
@@ -132,13 +139,14 @@ class SnMainAdapter(
                                 if (jsonObject != null) {
 
                                     var orEntry = SnOrderEntryVM()
+                                    orEntry.barCode.postValue(jsonObject.optString("barCode"))
+                                    orEntry.ncbpk.postValue(jsonObject.optString("ncbpk"))
+                                    orEntry.invClass.postValue(jsonObject.optString("invClass"))
                                     orEntry.invCode.postValue(jsonObject.optString("invCode"))
                                     orEntry.invName.postValue(jsonObject.optString("invName"))
-                                    orEntry.ncChkNum.postValue(jsonObject.optInt("ncChkNum"))
-                                    orEntry.invClass.postValue(jsonObject.optString("invClass"))
-                                    orEntry.barCode.postValue(jsonObject.optString("barCode"))
                                     orEntry.mainClass.postValue(jsonObject.optString("mainClass"))
-                                    orEntry.checkedNum.postValue(0)
+                                    orEntry.ncChkNum.postValue(jsonObject.optInt("ncChkNum"))
+                                    orEntry.pdaChkNum.postValue(0)
 
                                     order.addBillEntry(orEntry)
                                 }
