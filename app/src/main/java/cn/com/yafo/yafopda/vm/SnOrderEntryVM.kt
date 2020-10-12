@@ -14,6 +14,7 @@ class SnOrderEntryVM : ViewModel() {
     var ncbpk= MutableLiveData<String>()
     var ncChkNum= MutableLiveData<Int>()
     var pdaChkNum= MutableLiveData<Int>()
+    var orderCode= MutableLiveData<String>()
     //剩余数量
     val  remainNum :MutableLiveData<Int>
         get() {
@@ -23,5 +24,6 @@ class SnOrderEntryVM : ViewModel() {
 
 
     var snList : MutableList<String> = mutableListOf()
+    var BillDetailSNs : MutableList<SnVM> = mutableListOf()
 
 }

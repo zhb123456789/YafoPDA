@@ -16,11 +16,17 @@ class  JSONHelper {
 
                 if (value is JSONObject) {
 
-                    //修改JSONObject 的值为  mData
-                    var v = value["mData"]
-                    if (v.toString() == "{}")
-                        v = ""
-                    originalJSONObject.put(key, v.toString())
+                    //是否包含 mData 属性 ，如果包含
+                    if(value.has("mData")) {
+                        //修改JSONObject 的值为  mData
+                        var v = value["mData"]
+                        if (v.toString() == "{}")
+                            v = ""
+                        originalJSONObject.put(key, v.toString())
+                    }
+                    else {
+                        originalJSONObject.put(key, "")
+                    }
                     continue
                 }
                 if (value is JSONArray) {

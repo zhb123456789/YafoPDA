@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModel
 
 class SnOrderVM: ViewModel() {
 
+    //操作人
+    var operator = MutableLiveData<String>()
+
     var billCode = MutableLiveData<String>()
     var billDate = MutableLiveData<String>()
     val billType = MutableLiveData<String>()
@@ -18,6 +21,7 @@ class SnOrderVM: ViewModel() {
     val storeCode = MutableLiveData<String>()
     val chkOutTime = MutableLiveData<String>()
     val note = MutableLiveData<String>()
+    //是否强制提交（在单据已经存在于服务器上的情况）
     var compelCommit =false
     var isCheckOver=false
         get() {

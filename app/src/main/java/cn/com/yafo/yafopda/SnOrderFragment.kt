@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import cn.com.yafo.yafopda.Adapter.SnOrderAdapter
 import cn.com.yafo.yafopda.databinding.SnOrderFragmentBinding
+import cn.com.yafo.yafopda.helper.ClientBuilder
 import cn.com.yafo.yafopda.helper.GlobalVar
 import cn.com.yafo.yafopda.helper.JSONHelper
 import cn.com.yafo.yafopda.helper.Loading
@@ -225,7 +226,7 @@ class SnOrderFragment : Fragment() {
 
     fun submitOrder(order:SnOrderVM)
     {
-        val client = OkHttpClient()
+        val client = ClientBuilder.plainClient
         val JSON = MediaType.parse("application/json; charset=utf-8")
 
 
@@ -244,6 +245,7 @@ class SnOrderFragment : Fragment() {
         builder.url(GlobalVar.GetUrl("/api/PDA/AddCheckBill?forceCommit=${order.compelCommit}"))
         builder.addHeader("Content-Type","application/json")
             .post(requestBody)
+
 
         client.newCall(builder.build()).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {

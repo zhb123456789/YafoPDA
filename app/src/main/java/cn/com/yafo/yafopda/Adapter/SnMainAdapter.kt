@@ -16,6 +16,7 @@ import androidx.navigation.Navigation
 import cn.com.yafo.yafopda.BR
 import cn.com.yafo.yafopda.R
 import cn.com.yafo.yafopda.databinding.SnMainItemBinding
+import cn.com.yafo.yafopda.helper.GlobalVar
 import cn.com.yafo.yafopda.helper.GlobalVar.Companion.GetUrl
 import cn.com.yafo.yafopda.helper.Loading
 import cn.com.yafo.yafopda.vm.SnOrderEntryVM
@@ -133,6 +134,8 @@ class SnMainAdapter(
                             order.storeCode.postValue(o.getString("storeCode"))
                             order.note.postValue(o.getString("note"))
 
+                            order.operator.postValue( GlobalVar.userVM.username.value)
+
                             var jsonArray = o.getJSONArray("billEntrys")
                             for (i in 0 until jsonArray.length()) {
                                 var jsonObject = jsonArray.getJSONObject(i);
@@ -146,6 +149,7 @@ class SnMainAdapter(
                                     orEntry.invName.postValue(jsonObject.optString("invName"))
                                     orEntry.mainClass.postValue(jsonObject.optString("mainClass"))
                                     orEntry.ncChkNum.postValue(jsonObject.optInt("ncChkNum"))
+                                    orEntry.orderCode.postValue(order.billCode.value)
                                     orEntry.pdaChkNum.postValue(0)
 
                                     order.addBillEntry(orEntry)

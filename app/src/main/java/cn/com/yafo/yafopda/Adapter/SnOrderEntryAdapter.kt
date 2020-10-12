@@ -16,6 +16,7 @@ import cn.com.yafo.yafopda.databinding.SnOrderEntryItemBinding
 import cn.com.yafo.yafopda.helper.BeeAndVibrateManager
 import cn.com.yafo.yafopda.helper.Loading
 import cn.com.yafo.yafopda.vm.SnOrderEntryVM
+import cn.com.yafo.yafopda.vm.SnVM
 
 class SnOrderEntryAdapter(
     private val data: SnOrderEntryVM,
@@ -82,6 +83,13 @@ class SnOrderEntryAdapter(
          if (!data.snList.contains(snStr)) {
              if (data.ncChkNum.value!! > data.pdaChkNum.value!!)
              {
+
+                 var snvm= SnVM()
+                 snvm.SN.value =snStr
+                 snvm.InvCode.value =data.invCode.value
+                 snvm.InvName.value =data.invName.value
+                 snvm.OrderCode.value =data.orderCode.value
+                 data.BillDetailSNs.add(snvm)
                  data.snList.add(snStr)
                  data.pdaChkNum.postValue(data.snList.size)
 
