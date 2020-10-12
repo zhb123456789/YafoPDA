@@ -1,7 +1,6 @@
 package cn.com.yafo.yafopda.Adapter
 
 import android.app.AlertDialog
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -12,19 +11,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Toast
-import androidx.constraintlayout.widget.Constraints.TAG
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import cn.com.yafo.yafopda.BR
 import cn.com.yafo.yafopda.R
 import cn.com.yafo.yafopda.databinding.SnMainItemBinding
-import cn.com.yafo.yafopda.helper.CrashHandler
 import cn.com.yafo.yafopda.helper.GlobalVar.Companion.GetUrl
 import cn.com.yafo.yafopda.helper.Loading
 import cn.com.yafo.yafopda.vm.SnOrderEntryVM
 import cn.com.yafo.yafopda.vm.SnOrderVM
 import okhttp3.*
-import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
 
@@ -48,7 +44,50 @@ class SnMainAdapter(
         // 关闭Loading
        mLoading.dismiss()
     }
+    //代理 notifyDataSetChanged事件，okhttp 不能在子线程直接调用
+    val handler : Handler = object : Handler(){
+        override fun handleMessage(msg: Message?) {
+            super.handleMessage(msg)
+            when(msg?.what){
+                200 ->{
+                    try {
+                        notifyDataSetChanged()
+                    } catch (ex : Throwable){
+                        ex.printStackTrace()
+                    }
+                }
+                500 -> {
+                    val dialog = AlertDialog.Builder(context)
+                    dialog.setTitle("错误:${msg?.what}")
+                    if (msg != null) {
+                        val o = JSONObject(msg.obj.toString())
 
+                        dialog.setMessage(o.getString("exceptionMessage"))
+                    }
+                    dialog.setCancelable(true)
+                    dialog.show()
+                    LoadingDismiss()
+                }
+                else -> {
+                    // 1、创建简单的AlertDialog https://www.cnblogs.com/jiayongji/p/5371996.html
+                    val dialog = AlertDialog.Builder(context)
+
+                    // (2)设置各种属性 // 注：不设置哪项属性，这个属性就默认不会显示出来
+                    dialog.setTitle("出现错误:${msg?.what}")
+                    if (msg != null) {
+                        dialog.setMessage(msg.obj.toString())
+                    }
+
+                    // (3)设置dialog可否被取消
+                    dialog.setCancelable(true)
+
+                    // (4)显示出来
+                    dialog.show()
+                    LoadingDismiss()
+                }
+            }
+        }
+    }
     fun addOrder(orCode: String?) {
         val order =SnOrderVM()
         LoadingShow()
@@ -61,55 +100,13 @@ class SnMainAdapter(
 
             var call = client.newCall(request)
 
-            //代理 notifyDataSetChanged事件，okhttp 不能在子线程直接调用
-            val handler : Handler = object : Handler(){
-                override fun handleMessage(msg: Message?) {
-                    super.handleMessage(msg)
-                    when(msg?.what){
-                        200 ->{
-                            try {
-                               notifyDataSetChanged()
-                            } catch (ex : Throwable){
-                                ex.printStackTrace()
-                            }
-                        }
-                        500 -> {
-                            val dialog = AlertDialog.Builder(context)
-                            dialog.setTitle("错误:${msg?.what}")
-                            if (msg != null) {
-                                val o = JSONObject(msg.obj.toString())
 
-                                dialog.setMessage(o.getString("exceptionMessage"))
-                            }
-                            dialog.setCancelable(true)
-                            dialog.show()
-                            LoadingDismiss()
-                        }
-                        else -> {
-                        // 1、创建简单的AlertDialog https://www.cnblogs.com/jiayongji/p/5371996.html
-                            val dialog = AlertDialog.Builder(context)
-
-                            // (2)设置各种属性 // 注：不设置哪项属性，这个属性就默认不会显示出来
-                            dialog.setTitle("服务器错误:${msg?.what}")
-                            if (msg != null) {
-                                dialog.setMessage(msg.obj.toString())
-                            }
-
-                            // (3)设置dialog可否被取消
-                            dialog.setCancelable(true)
-
-                            // (4)显示出来
-                            dialog.show()
-                            LoadingDismiss()
-                        }
-                    }
-                }
-            }
 
             //异步请求
             call.enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    Log.d("UPDATE", "onFailure: $e")
+                    Log.d("异步请求失败", "onFailure: $e")
+
                     val message = Message.obtain()
                     message.obj = e
                     message.what = 501
@@ -119,36 +116,45 @@ class SnMainAdapter(
                 @Throws(IOException::class)
                 override fun onResponse(call: Call, response: Response) {
                     if(response.code()==200) {
-                        val o = JSONObject(response.body().string())
-                       // order.order.value.code.
-                        order.billCode.postValue(o.getString("billCode"))
-                        order.custName.postValue(o.getString("custName"))
-                        order.dpt.postValue(o.getString("dpt"))
-                        order.biz.postValue(o.getString("biz"))
-                        order.storeCode.postValue(o.getString("storeCode"))
-                        order.note.postValue(o.getString("note"))
+                        try {
+                            val o = JSONObject(response.body().string())
+                            // order.order.value.code.
+                            order.billCode.postValue(o.getString("billCode"))
+                            order.custName.postValue(o.getString("custName"))
+                            order.dpt.postValue(o.getString("dpt"))
+                            order.biz.postValue(o.getString("biz"))
+                            order.storeCode.postValue(o.getString("storeCode"))
+                            order.note.postValue(o.getString("note"))
 
-                        var jsonArray =o.getJSONArray("billDetails")
-                        for ( i in 0 until jsonArray.length()){
-                            var jsonObject = jsonArray.getJSONObject(i);
-                            if (jsonObject != null) {
+                            var jsonArray = o.getJSONArray("billEntrys")
+                            for (i in 0 until jsonArray.length()) {
+                                var jsonObject = jsonArray.getJSONObject(i);
+                                if (jsonObject != null) {
 
-                                var orEntry=SnOrderEntryVM()
-                                orEntry.invCode.postValue(jsonObject.optString("invCode"))
-                                orEntry.invName.postValue(jsonObject.optString("invName"))
-                                orEntry.ncChkNum.postValue(jsonObject.optInt("ncChkNum"))
-                                orEntry.invClass.postValue(jsonObject.optString("invClass"))
-                                orEntry.barCode.postValue(jsonObject.optString("barCode"))
-                                orEntry.mainClass.postValue(jsonObject.optString("mainClass"))
-                                orEntry.checkedNum.postValue(0)
+                                    var orEntry = SnOrderEntryVM()
+                                    orEntry.invCode.postValue(jsonObject.optString("invCode"))
+                                    orEntry.invName.postValue(jsonObject.optString("invName"))
+                                    orEntry.ncChkNum.postValue(jsonObject.optInt("ncChkNum"))
+                                    orEntry.invClass.postValue(jsonObject.optString("invClass"))
+                                    orEntry.barCode.postValue(jsonObject.optString("barCode"))
+                                    orEntry.mainClass.postValue(jsonObject.optString("mainClass"))
+                                    orEntry.checkedNum.postValue(0)
 
-                                order.addorderEntry( orEntry )
+                                    order.addBillEntry(orEntry)
+                                }
+
                             }
 
+                            data.add(order)
+                            handler.sendEmptyMessage(200)
                         }
-
-                        data.add(order )
-                        handler.sendEmptyMessage(200)
+                        catch  (e:Exception) {
+                            val message = Message.obtain()
+                            message.obj = "JSON翻译失败$e"
+                            message.what = -1
+                            handler.sendMessage(message)
+                            Log.e("JSON翻译失败:", "", e)
+                        }
                     }
                     else
                     {
@@ -168,12 +174,17 @@ class SnMainAdapter(
                 }
             })
         }catch (e:Exception) {
-            Log.e("UPDATE ERROR:", "", e)
+            val message = Message.obtain()
+            message.obj = e
+            message.what = -1
+            handler.sendMessage(message)
+            Log.e("ERROR:", "", e)
         }
     }
     override fun getCount(): Int {
         return data.size
     }
+
 
     override fun getItem(position: Int): Any {
         return data[position]

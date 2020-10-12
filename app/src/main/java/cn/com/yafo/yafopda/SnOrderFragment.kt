@@ -82,9 +82,9 @@ class SnOrderFragment : Fragment() {
                     //提示确认
                     val dialog =
                         AlertDialog.Builder(context)
-                    dialog.setTitle("确认")
+                    dialog.setTitle("覆盖确认")
                     // dialog.setIcon(R.drawable.dictation2_64);
-                    dialog.setMessage("该订单没有完成验货，是否提交？")
+                    dialog.setMessage("该订单已经存在，是否覆盖？")
 
                     // 设置“确定”按钮,使用DialogInterface.OnClickListener接口参数
                     dialog.setPositiveButton(
@@ -99,7 +99,8 @@ class SnOrderFragment : Fragment() {
                     // 设置“取消”按钮,使用DialogInterface.OnClickListener接口参数
                     dialog.setNegativeButton(
                         "取消"
-                    ) { _, _ -> Log.d("Dialog", "点击了“取消”按钮") }
+                    ) { _, _ -> mLoading.dismiss()
+                        Log.d("Dialog", "点击了“取消”按钮") }
                     dialog.show()
                 }
                 500 ->
@@ -143,7 +144,7 @@ class SnOrderFragment : Fragment() {
         order =vm.orderList[this!!.po!!]
         mBinding.order=order
         //定制Adapter 绑定List
-        adapter = SnOrderAdapter( order.orderEntrys,this!!.po!!, requireContext())
+        adapter = SnOrderAdapter( order.billEntrys,this!!.po!!, requireContext())
         mBinding.adapter=adapter
 
         mLoading = object : Loading(context) {

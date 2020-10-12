@@ -9,13 +9,9 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import cn.com.yafo.yafopda.Adapter.SnOrderAdapter
 import cn.com.yafo.yafopda.Adapter.SnOrderEntryAdapter
 import cn.com.yafo.yafopda.databinding.SnOrderEntryFragmentBinding
-import cn.com.yafo.yafopda.databinding.SnOrderFragmentBinding
 import cn.com.yafo.yafopda.vm.SnMainFragmentVM
-import cn.com.yafo.yafopda.vm.SnOrderEntryVM
-import cn.com.yafo.yafopda.vm.SnOrderVM
 import kotlinx.android.synthetic.main.one_input_dialog.view.*
 import kotlinx.android.synthetic.main.sn_order_entry_fragment.*
 import org.jetbrains.anko.support.v4.runOnUiThread
@@ -48,7 +44,7 @@ class SnOrderEntryFragment : Fragment() {
 
         var vm= ViewModelProvider(this.requireActivity()).get(SnMainFragmentVM::class.java) // 关键代码
         var mBinding: SnOrderEntryFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.sn_order_entry_fragment,container,false)
-        var orderEntry =vm.orderList[this!!.poOrder!!].orderEntrys[this!!.poOrderEntry!!]
+        var orderEntry =vm.orderList[this!!.poOrder!!].billEntrys[this!!.poOrderEntry!!]
         var orderCode =vm.orderList[this!!.poOrder!!].billCode
         mBinding.orderEntry=orderEntry
         mBinding.orderCode=orderCode.value

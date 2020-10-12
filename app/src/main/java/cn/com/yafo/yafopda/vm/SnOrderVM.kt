@@ -1,17 +1,7 @@
 package cn.com.yafo.yafopda.vm
 
-import android.os.Handler
-import android.os.Message
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import cn.com.yafo.yafopda.helper.GlobalVar
-import cn.com.yafo.yafopda.helper.JSONHelper
-import com.google.gson.Gson
-import okhttp3.*
-import org.json.JSONArray
-import org.json.JSONObject
-import java.io.IOException
 
 
 class SnOrderVM: ViewModel() {
@@ -31,7 +21,7 @@ class SnOrderVM: ViewModel() {
     var isCheckOver=false
         get() {
             //检查是否验货完成
-            for (item in orderEntrys)
+            for (item in billEntrys)
             {
                 if (item.remainNum.value!! >0)
                 {
@@ -41,10 +31,10 @@ class SnOrderVM: ViewModel() {
             return true
         }
 
-    var orderEntrys: MutableList<SnOrderEntryVM> = mutableListOf()
+    var billEntrys: MutableList<SnOrderEntryVM> = mutableListOf()
 
-    fun addorderEntry(orderEntry: SnOrderEntryVM) {
-        orderEntrys.add(orderEntry)
+    fun addBillEntry(orderEntry: SnOrderEntryVM) {
+        billEntrys.add(orderEntry)
     }
 
 }
