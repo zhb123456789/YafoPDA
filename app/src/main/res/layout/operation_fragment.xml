@@ -16,11 +16,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/bgimg"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:alpha="0.3"
-            android:src="@drawable/box" />
+            android:alpha="0.3" />
 
         <LinearLayout
             android:id="@+id/bg"
@@ -32,18 +32,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:fadingEdge="vertical">
+                <TextView
+                    android:id="@+id/textViewOrder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="装箱单据号"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </ScrollView>
 
-            <TextView
-                android:id="@+id/textViewOrder"
-                android:layout_width="226dp"
-                android:layout_height="441dp"
-                android:layout_marginStart="47dp"
-                android:layout_marginTop="48dp"
-                android:text="123123"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
     </RelativeLayout>
 

@@ -57,7 +57,16 @@ class MainFragment : Fragment() {
             }
         })
         mBinding.btnBox.setOnClickListener(View.OnClickListener { v ->
-            navigation(R.id.action_mainFragment_to_box_fragment,v)
+            val bundle = Bundle()
+            bundle.putString("Operation", "boxing")
+            Navigation.findNavController(v)
+                .navigate(R.id.action_mainFragment_to_operation_fragment, bundle)
+        })
+        mBinding.btnPicking.setOnClickListener(View.OnClickListener { v ->
+            val bundle = Bundle()
+            bundle.putString("Operation", "picking")
+            Navigation.findNavController(v)
+                .navigate(R.id.action_mainFragment_to_operation_fragment, bundle)
         })
 
 

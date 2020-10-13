@@ -14,11 +14,8 @@
             android:id="@+id/action_main_to_SN"
             app:destination="@id/sn_main_fragment" />
         <action
-            android:id="@+id/action_mainFragment_to_box_fragment"
-            app:destination="@id/box_fragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_picking_Fragment"
-            app:destination="@id/picking_Fragment" />
+            android:id="@+id/action_mainFragment_to_operation_fragment"
+            app:destination="@id/operation_fragment" />
         <action
             android:id="@+id/action_mainFragment_to_countFragment"
             app:destination="@id/countFragment" />
@@ -58,20 +55,12 @@
             app:destination="@id/sn_order_fragment" />
     </fragment>
     <fragment
-        android:id="@+id/box_fragment"
-        android:name="cn.com.yafo.yafopda.box_fragment"
-        android:label="box_fragment" >
+        android:id="@+id/operation_fragment"
+        android:name="cn.com.yafo.yafopda.OperationFragment"
+        android:label="operation_fragment"
+        tools:layout="@layout/operation_fragment">
         <action
-            android:id="@+id/action_box_fragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/picking_Fragment"
-        android:name="cn.com.yafo.yafopda.PickingFragment"
-        android:label="picking_fragment"
-        tools:layout="@layout/picking_fragment" >
-        <action
-            android:id="@+id/action_picking_Fragment_to_mainFragment"
+            android:id="@+id/action_operation_fragment_to_mainFragment"
             app:destination="@id/mainFragment" />
     </fragment>
     <fragment

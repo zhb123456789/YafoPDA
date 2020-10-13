@@ -2,6 +2,10 @@
 <resources>
     <color name="colorPrimary">#2196F3</color>
     <color name="colorPrimaryDark">#2196F3</color>
+    <color name="cEEE">#EEE</color>
+    <color name="c999">#999</color>
+    <color name="c666">#666</color>
+    <color name="c333">#333</color>
     <color name="colorAccent">#D81B60</color>
 
 
