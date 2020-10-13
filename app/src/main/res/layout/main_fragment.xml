@@ -18,7 +18,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainFragment">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:id="@+id/bgimg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom"
+                android:alpha="0.3"
+                app:srcCompat="@drawable/main" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -66,14 +79,14 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <Button
+                    <ImageView
                         android:id="@+id/btnStockCount"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_gravity="center_horizontal"
-                        android:background="@drawable/button_circle_shape"
                         android:fontFamily="sans-serif-medium"
-                        android:textSize="24sp"></Button>
+                        android:textSize="24sp"
+                        app:srcCompat="@drawable/count_icon"></ImageView>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -90,13 +103,13 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <Button
+                    <ImageView
                         android:id="@+id/btnPicking"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_gravity="center_horizontal"
-                        android:background="@drawable/button_circle_shape"
                         android:fontFamily="sans-serif-medium"
+                        app:srcCompat="@drawable/picking_icon"
                         android:textSize="24sp" />
 
                     <TextView
@@ -121,17 +134,17 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <Button
+                    <ImageView
                         android:id="@+id/btnBox"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:text="装箱"
                         android:textSize="24sp"
                         android:layout_gravity="center_horizontal"
-                        android:background="@drawable/button_circle_shape"
+                        app:srcCompat="@drawable/boxing_icon"
                         >
 
-                    </Button>>
+                    </ImageView>>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -149,14 +162,14 @@
                     android:orientation="vertical">
 
 
-                    <Button
+                    <ImageView
                         android:id="@+id/btnSN"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:text="验货"
                         android:textSize="24sp"
                         android:layout_gravity="center_horizontal"
-                        android:background="@drawable/button_circle_shape"
+                        app:srcCompat="@drawable/check_icon"
                         tools:ignore="OnClick" />
 
                     <TextView
@@ -172,5 +185,6 @@
 
         </LinearLayout>
 
+        </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
