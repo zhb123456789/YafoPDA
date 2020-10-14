@@ -39,7 +39,8 @@ class MainActivity : AppCompatActivity() {
 
     //private lateinit var viewModel: MainViewModel
     val userparam = MutableLiveData<String>()
-    val handler : Handler = object : Handler(){
+    val handler : Handler = @SuppressLint("HandlerLeak")
+    object : Handler(){
         override fun handleMessage(msg: Message?) {
             super.handleMessage(msg)
             when(msg?.what){
@@ -78,7 +79,6 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val crashHandler = CrashHandler.getInstance()
         // 注册crashHandler
         CrashHandler.getInstance()
             .initHandler { t, e -> Toast.makeText(applicationContext, "未处理异常：" + t.name + e.toString(), Toast.LENGTH_LONG).show() }
@@ -128,15 +128,15 @@ class MainActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState);
     }
 
-    fun btnSNonClick(v: View) {
-
-        // 参数设置
-        val bundle = Bundle()
-        bundle.putString("name", "TeaOf")
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, SnMainFragment.newInstance("1","2"))
-            .addToBackStack("").commit()
-    }
+//    fun btnSNonClick(v: View) {
+//
+//        // 参数设置
+//        val bundle = Bundle()
+//        bundle.putString("name", "TeaOf")
+//        supportFragmentManager.beginTransaction()
+//            .replace(R.id.container, SnMainFragment.newInstance("1","2"))
+//            .addToBackStack("").commit()
+//    }
 
     //获取当前版本号
     fun getVersionCode(context: Context): String? {
