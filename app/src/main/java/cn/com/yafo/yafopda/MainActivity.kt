@@ -2,6 +2,7 @@ package cn.com.yafo.yafopda
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -10,19 +11,16 @@ import android.os.Handler
 import android.os.Message
 import android.os.PersistableBundle
 import android.util.Log
-import android.view.KeyEvent
-import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import cn.com.yafo.yafopda.helper.CrashHandler
+import cn.com.yafo.yafopda.helper.DownloadUtils
 import cn.com.yafo.yafopda.helper.GlobalVar
 import cn.com.yafo.yafopda.vm.MainViewModel
-import com.xiaoluo.updatelib.UpdateManager
 import kotlinx.android.synthetic.main.main_activity.*
 import okhttp3.*
 import org.json.JSONArray
@@ -139,7 +137,7 @@ class MainActivity : AppCompatActivity() {
 //    }
 
     //获取当前版本号
-    fun getVersionCode(context: Context): String? {
+    private fun getVersionCode(context: Context): String? {
         try {
             val packageManager: PackageManager = context.packageManager
             val packageInfo: PackageInfo = packageManager.getPackageInfo(
@@ -153,22 +151,10 @@ class MainActivity : AppCompatActivity() {
     }
     fun update(appName:String ,verCode:Int,verName:String)
     {
-        //https://www.jianshu.com/p/e8449ea77280
-        UpdateManager.getInstance().init(this) // 获取实例并初始化,必要
-            .compare(UpdateManager.COMPARE_VERSION_NAME) // 通过版本号或版本名比较,默认版本号
-            .downloadUrl(GlobalVar.GetUrl("/fordownload/yafopad/$appName")) // 下载地址,必要
-            .downloadTitle("正在下载洋帆手持机程序") // 下载标题
-            .lastestVerName(verName) // 最新版本名
-            .lastestVerCode(verCode) // 最新版本号
-            // .minVerName("1.0") // 最低版本名
-            // .minVerCode(1) // 最低版本号
-            // .isForce(true) // 是否强制更新,true无视版本直接更新
-            .update() // 开始更新
-        // 设置版本对比回调
-        // .setListener { result -> Toast.makeText(this, result, Toast.LENGTH_SHORT).show() }
+        DownloadUtils(this, GlobalVar.GetUrl("fordownload/yafopad/$appName"), appName)
     }
     //检查更新
-    fun checkUpdate() {
+    private fun checkUpdate() {
         val client = OkHttpClient()
         val request = Request.Builder().get()
             .url(GlobalVar.GetUrl("/fordownload/yafopad/output.json"))

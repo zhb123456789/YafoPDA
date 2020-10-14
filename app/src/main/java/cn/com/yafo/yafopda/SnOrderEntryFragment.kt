@@ -44,8 +44,8 @@ class SnOrderEntryFragment : Fragment() {
 
         var vm= ViewModelProvider(this.requireActivity()).get(SnMainFragmentVM::class.java) // 关键代码
         var mBinding: SnOrderEntryFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.sn_order_entry_fragment,container,false)
-        var orderEntry =vm.orderList[this!!.poOrder!!].billEntrys[this!!.poOrderEntry!!]
-        var orderCode =vm.orderList[this!!.poOrder!!].billCode
+        var orderEntry =vm.orderList[this.poOrder!!].billEntrys[this.poOrderEntry!!]
+        var orderCode =vm.orderList[this.poOrder!!].billCode
         mBinding.orderEntry=orderEntry
         mBinding.orderCode=orderCode.value
 
@@ -121,7 +121,7 @@ class SnOrderEntryFragment : Fragment() {
                 dialogView.edit_text.setOnKeyListener { _, keyCode, event ->
                     if (KeyEvent.KEYCODE_ENTER == keyCode && event.action == KeyEvent.ACTION_DOWN) {
                         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick()
-                        true
+
                     }
                     false
                 }
