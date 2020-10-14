@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Button
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
@@ -20,6 +21,7 @@ import cn.com.yafo.yafopda.databinding.SnOrderItemBinding
 import cn.com.yafo.yafopda.helper.BeeAndVibrateManager
 import cn.com.yafo.yafopda.vm.SnOrderEntryVM
 import kotlinx.android.synthetic.main.one_input_dialog.view.*
+import java.lang.reflect.Field
 
 
 class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int,
@@ -103,15 +105,23 @@ class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int
                 // 设置“确定”按钮,使用DialogInterface.OnClickListener接口参数
                 var dialogView = LayoutInflater.from(context)
                     .inflate(R.layout.one_input_dialog, null);
-                builder.setPositiveButton(
-                    "确定"
-                ) { _, _ ->
+                builder.setPositiveButton("确定", DialogInterface.OnClickListener { dialog, which  ->
                     Log.d("Dialog", "点击了“确认”按钮")
-                    doCheckBox(dialogView, vm)
-                }
+                    if(doCheckBox(dialogView, vm)){
+                        closeDialog(dialog );
+                    }else{
+                        keepDialog(dialog);
+                    }
+                })
+
                 val dialog = builder.create()
 
+
+
+
                 dialogView.edit_text.inputType = InputType.TYPE_CLASS_NUMBER;
+
+
                 dialog.setTitle("请输入数量");
                 dialog.setView(dialogView);
                 // dialog.setIcon(R.drawable.dictation2_64);
@@ -138,7 +148,8 @@ class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int
     }
 
 
-    private fun doCheckBox(dialogView: View, vm: SnOrderEntryVM) {
+    private fun doCheckBox(dialogView: View, vm: SnOrderEntryVM):Boolean {
+        var code=true
         var num = dialogView.edit_text.text.toString().toInt()
         var checknum = vm.pdaChkNum.value
         if (checknum == null) {
@@ -150,9 +161,43 @@ class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int
         } else {
             Toast.makeText(context, "应捡数量超出！", Toast.LENGTH_LONG).show()
             BeeAndVibrateManager.playBeeAndVibrate(context, R.raw.warning, 1000, null)
+            code=false
         }
         notifyDataSetChanged() //刷新数据
+        return code
     }
+
+    /**
+     * 假设对话框已经关闭，欺骗系统，以保持输入窗口
+     * @param mDialogLongInterface    点击对话框按钮事件传进来的mDialogInterface参数
+     */
+    fun keepDialog(mDialogLongInterface: DialogInterface) {
+        try {
+            val field: Field =
+                mDialogLongInterface.javaClass.superclass!!.getDeclaredField("mShowing")
+            field.isAccessible = true //将mShowing设置为false表示对话框已关闭
+            field.set(mDialogLongInterface, false)
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * 销毁对话框
+     * @param mDialogInterface
+     */
+    fun closeDialog(mDialogInterface: DialogInterface) {
+        try {
+            val field: Field =
+                mDialogInterface.javaClass.superclass!!.getDeclaredField("mShowing")
+            field.isAccessible = true
+            field.set(mDialogInterface, true)
+            mDialogInterface.dismiss()
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+    }
+
 }
 
 
