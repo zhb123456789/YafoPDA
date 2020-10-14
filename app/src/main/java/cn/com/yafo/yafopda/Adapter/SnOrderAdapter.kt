@@ -27,11 +27,11 @@ import java.lang.reflect.Field
 class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int,
                       var context: Context) : BaseAdapter() {
     override fun getCount(): Int {
-        return data!!.size
+        return data.size
     }
 
     override fun getItem(position: Int): Any? {
-        return data!![position]
+        return data[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -58,11 +58,11 @@ class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int
             binding = DataBindingUtil.getBinding(convertView)
         }
         //binding.setVariable(BR.orderitem, data.get(position)); //BR 不要写错了
-        binding!!.orderitem = data!![position] //BR. 此方法也可以
+        binding!!.orderitem = data[position] //BR. 此方法也可以
         //binding.button4.setOnClickListener(new OnBtnClickListener( position));
         binding.snOrderItemLayout.setOnClickListener(OnItemClickListener(position))
         binding.snOrderItemLayout.setOnLongClickListener {
-            data!![position].barCode.value?.let { it1 -> checkInvNumByBarcode(it1) }
+            data[position].barCode.value?.let { it1 -> checkInvNumByBarcode(it1) }
             true
         }
         return binding.root
@@ -74,7 +74,7 @@ class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int
                 val bundle = Bundle()
                 bundle.putInt("positionOrder", po)
                 bundle.putInt("positionEntry", position)
-                if (data!![position].mainClass.value == "打印机") {
+                if (data[position].mainClass.value == "打印机") {
                     Navigation.findNavController(view)
                         .navigate(R.id.action_sn_order_fragment_to_sn_order_entry_fragment, bundle)
                 } else {
@@ -92,8 +92,8 @@ class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int
 //todo 如果已经存在 数量录入框，那么直接 确认上一个输入框？
         var invFind = false
 
-        for (i in data!!.indices) {
-            val vm = data!![i]
+        for (i in data.indices) {
+            val vm = data[i]
             if (vm.barCode.value.toString() == barcode) {
                 invFind = true
                 if (vm.remainNum.value!! <= 0) {
@@ -105,7 +105,7 @@ class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int
                 // 设置“确定”按钮,使用DialogInterface.OnClickListener接口参数
                 var dialogView = LayoutInflater.from(context)
                     .inflate(R.layout.one_input_dialog, null);
-                builder.setPositiveButton("确定", DialogInterface.OnClickListener { dialog, which  ->
+                builder.setPositiveButton("确定", DialogInterface.OnClickListener { dialog, _ ->
                     Log.d("Dialog", "点击了“确认”按钮")
                     if(doCheckBox(dialogView, vm)){
                         closeDialog(dialog );
@@ -132,7 +132,6 @@ class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int
                 dialogView.edit_text.setOnKeyListener { _, keyCode, event ->
                     if (KeyEvent.KEYCODE_ENTER == keyCode && event.action == KeyEvent.ACTION_DOWN) {
                         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick()
-                        true
                     }
                     false
                 }
