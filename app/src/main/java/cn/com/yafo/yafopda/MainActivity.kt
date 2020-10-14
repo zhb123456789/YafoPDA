@@ -10,9 +10,12 @@ import android.os.Handler
 import android.os.Message
 import android.os.PersistableBundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -29,6 +32,10 @@ import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
     var fragmentmain: MainFragment ? = null
+    /**
+     * 上次点击返回键的时间
+     */
+    private var lastBackPressTime = -1L
 
     //private lateinit var viewModel: MainViewModel
     val userparam = MutableLiveData<String>()
@@ -46,7 +53,28 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
+    //两次返回退出 https://www.jianshu.com/p/4b70f0ba2296
+    override fun finishAfterTransition() {
+        if(popSupportBackStack()){
+            return
+        }
+        val currentTIme = System.currentTimeMillis();
+        if(lastBackPressTime == -1L || currentTIme - lastBackPressTime >= 2000){
+            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show()
+            lastBackPressTime = currentTIme
+        }else{
+            //退出应用
+            finish()
+        }
+    }
+    /**
+     * @return true:没有Fragment弹出 false:有Fragment弹出
+     */
+    private fun popSupportBackStack():Boolean{
+        // 当Fragment状态保存了
+        return supportFragmentManager.isStateSaved
+                ||supportFragmentManager.popBackStackImmediate()
+    }
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

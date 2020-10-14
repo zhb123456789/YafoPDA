@@ -45,35 +45,35 @@ class MainFragment : Fragment() {
 
         //设置按钮导航
         mBinding.btnSN.setOnClickListener(View.OnClickListener { v ->
-            if (GlobalVar.userVM.username.value == null)
-            { val t =
-                Toast.makeText(context, "请先填写用户名或编码", Toast.LENGTH_LONG)
-                t.setGravity(Gravity.TOP, 0, 0)
-                t.show()
-            }
-            else {
-                val controller = Navigation.findNavController(v)
-                controller.navigate(R.id.action_main_to_SN)
-            }
+//            if (GlobalVar.userVM.username.value == null)
+//            { val t =
+//                Toast.makeText(context, "请先填写用户名或编码", Toast.LENGTH_LONG)
+//                t.setGravity(Gravity.TOP, 0, 0)
+//                t.show()
+//            }
+//            else {
+//                val controller = Navigation.findNavController(v)
+//                controller.navigate(R.id.action_main_to_SN)
+//            }
+            navigation(R.id.action_main_to_SN,v,null)
         })
         mBinding.btnBox.setOnClickListener(View.OnClickListener { v ->
             val bundle = Bundle()
             bundle.putString("Operation", "boxing")
-            Navigation.findNavController(v)
-                .navigate(R.id.action_mainFragment_to_operation_fragment, bundle)
+            navigation(R.id.action_mainFragment_to_operation_fragment,v,bundle)
         })
         mBinding.btnPicking.setOnClickListener(View.OnClickListener { v ->
             val bundle = Bundle()
             bundle.putString("Operation", "picking")
-            Navigation.findNavController(v)
-                .navigate(R.id.action_mainFragment_to_operation_fragment, bundle)
+
+            navigation(R.id.action_mainFragment_to_operation_fragment,v,bundle)
         })
 
 
         return mBinding.root;
 
     }
-    fun navigation(resId:Int,v:View)
+    fun navigation(resId:Int, v:View, bundle: Bundle?)
     {
         if (GlobalVar.userVM.username.value == null)
         { val t =
@@ -83,7 +83,10 @@ class MainFragment : Fragment() {
         }
         else {
             val controller = Navigation.findNavController(v)
-            controller.navigate(resId)
+            if(bundle==null)
+                controller.navigate(resId)
+            else
+                controller.navigate(resId,bundle)
         }
     }
 
