@@ -94,7 +94,8 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="11dp"
                         android:gravity="center_horizontal"
-                        android:text="盘点" />
+                        android:text="盘点"
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
@@ -118,6 +119,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="11dp"
                         android:gravity="center_horizontal"
+                        android:textSize="20sp"
                         android:text="拣货" />
                 </LinearLayout>
             </LinearLayout>
@@ -152,6 +154,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="11dp"
                         android:gravity="center_horizontal"
+                        android:textSize="20sp"
                         android:text="装箱" />
 
                 </LinearLayout>
@@ -178,6 +181,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="11dp"
                         android:gravity="center_horizontal"
+                        android:textSize="20sp"
                         android:text="验货" />
                 </LinearLayout>
             </LinearLayout>
