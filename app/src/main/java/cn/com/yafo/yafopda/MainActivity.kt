@@ -1,5 +1,6 @@
 package cn.com.yafo.yafopda
 
+import android.R
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
@@ -30,6 +31,8 @@ import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
     var fragmentmain: MainFragment ? = null
+    var verName =""
+    private var mContext: Context? = null
     /**
      * 上次点击返回键的时间
      */
@@ -43,9 +46,20 @@ class MainActivity : AppCompatActivity() {
             super.handleMessage(msg)
             when(msg?.what){
                 0 -> try {
-                    msg.data.getString("appName")?.let { update(it,msg.data.getInt("appVer"),
-                        msg.data.getString("appVerName")!!
-                    ) }
+
+                    var appname=msg.data.getString("appName")
+                    AlertDialog.Builder(mContext!!)
+                        .setMessage("有新的升级程序")
+                        .setTitle("升级")
+                        .setPositiveButton("升级", DialogInterface.OnClickListener { _, _ ->
+                            //更新
+                            appname?.let { update(it) }
+                            Toast.makeText(mContext, "正在下载升级程序...", Toast.LENGTH_SHORT).show()
+                        })
+                        .setNeutralButton("取消", null)
+                        .create()
+                        .show()
+
                 } catch (ex : Throwable){
                     ex.printStackTrace()
                 }
@@ -77,6 +91,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mContext=this
         // 注册crashHandler
         CrashHandler.getInstance()
             .initHandler { t, e -> Toast.makeText(applicationContext, "未处理异常：" + t.name + e.toString(), Toast.LENGTH_LONG).show() }
@@ -85,8 +100,9 @@ class MainActivity : AppCompatActivity() {
         //自动更新
         checkUpdate()
 
-        setContentView(R.layout.main_activity)
+        setContentView(cn.com.yafo.yafopda.R.layout.main_activity)
 
+        verName=getVersionCode(this)
         appVer.text = "V:"+getVersionCode(this)
 
         GlobalVar.userVM = ViewModelProvider(this)[MainViewModel::class.java] // 关键代码
@@ -137,7 +153,7 @@ class MainActivity : AppCompatActivity() {
 //    }
 
     //获取当前版本号
-    private fun getVersionCode(context: Context): String? {
+    private fun getVersionCode(context: Context): String {
         try {
             val packageManager: PackageManager = context.packageManager
             val packageInfo: PackageInfo = packageManager.getPackageInfo(
@@ -147,9 +163,9 @@ class MainActivity : AppCompatActivity() {
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
-        return null
+        return ""
     }
-    fun update(appName:String ,verCode:Int,verName:String)
+    fun update(appName:String )
     {
         DownloadUtils(this, GlobalVar.GetUrl("fordownload/yafopad/$appName"), appName)
     }
@@ -177,16 +193,18 @@ class MainActivity : AppCompatActivity() {
                 var appVer = data.getInt("versionCode")
                 var appVerName = data.getString("versionName")
 
-                val message = Message.obtain()
-                message.what = 0
+                if(appVerName!=verName) {
+                    val message = Message.obtain()
+                    message.what = 0
 
-                //传递复杂类型的消息
-                val bundleData = Bundle()
-                bundleData.putString("appName", appName)
-                bundleData.putString("appVerName", appVerName)
-                bundleData.putInt("appVer", appVer)
-                message.data = bundleData
-                handler.sendMessage(message)
+                    //传递复杂类型的消息
+                    val bundleData = Bundle()
+                    bundleData.putString("appName", appName)
+                    bundleData.putString("appVerName", appVerName)
+                    bundleData.putInt("appVer", appVer)
+                    message.data = bundleData
+                    handler.sendMessage(message)
+                }
             }
         })
     }
