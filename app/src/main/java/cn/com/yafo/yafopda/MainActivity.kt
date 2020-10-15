@@ -92,6 +92,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext=this
+        verName=getVersionCode(this)
         // 注册crashHandler
         CrashHandler.getInstance()
             .initHandler { t, e -> Toast.makeText(applicationContext, "未处理异常：" + t.name + e.toString(), Toast.LENGTH_LONG).show() }
@@ -102,7 +103,6 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(cn.com.yafo.yafopda.R.layout.main_activity)
 
-        verName=getVersionCode(this)
         appVer.text = "V:"+getVersionCode(this)
 
         GlobalVar.userVM = ViewModelProvider(this)[MainViewModel::class.java] // 关键代码
@@ -193,7 +193,7 @@ class MainActivity : AppCompatActivity() {
                 var appVer = data.getInt("versionCode")
                 var appVerName = data.getString("versionName")
 
-                if(appVerName!=verName) {
+                if(appVerName != verName) {
                     val message = Message.obtain()
                     message.what = 0
 
