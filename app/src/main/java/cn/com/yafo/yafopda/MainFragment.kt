@@ -45,16 +45,9 @@ class MainFragment : Fragment() {
 
         //设置按钮导航
         mBinding.btnSN.setOnClickListener(View.OnClickListener { v ->
-//            if (GlobalVar.userVM.username.value == null)
-//            { val t =
-//                Toast.makeText(context, "请先填写用户名或编码", Toast.LENGTH_LONG)
-//                t.setGravity(Gravity.TOP, 0, 0)
-//                t.show()
-//            }
-//            else {
-//                val controller = Navigation.findNavController(v)
-//                controller.navigate(R.id.action_main_to_SN)
-//            }
+            navigation(R.id.action_mainFragment_to_SNRecordFragment,v,null)
+        })
+        mBinding.btnCheck.setOnClickListener(View.OnClickListener { v ->
             navigation(R.id.action_main_to_SN,v,null)
         })
         mBinding.btnBox.setOnClickListener(View.OnClickListener { v ->

@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_mainFragment_to_countFragment"
             app:destination="@id/countFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_SNRecordFragment"
+            app:destination="@id/SNRecordFragment" />
     </fragment>
     <fragment
         android:id="@+id/sn_main_fragment"
@@ -70,6 +73,15 @@
         tools:layout="@layout/count_fragment" >
         <action
             android:id="@+id/action_countFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/SNRecordFragment"
+        android:name="cn.com.yafo.yafopda.SNRecordFragment"
+        android:label="SNRecordFragment"
+        tools:layout="@layout/sn_record_fragment" >
+        <action
+            android:id="@+id/action_SNRecordFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
     </fragment>
 
