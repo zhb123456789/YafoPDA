@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:singleLine="true"
-                android:hint="请输入供应商(必填)"
+                android:hint="供应商(必填)"
                 />
             <EditText
                 android:id="@+id/txt_note"
@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:singleLine="true"
-                android:hint="备注(必填)"
+                android:hint="订单号(必填)"
                 />
 
             <ScrollView

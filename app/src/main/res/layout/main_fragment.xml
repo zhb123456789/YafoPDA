@@ -87,7 +87,7 @@
                         android:layout_gravity="center_horizontal"
                         android:fontFamily="sans-serif-medium"
                         android:textSize="24sp"
-                        app:srcCompat="@drawable/count_icon"></ImageView>
+                        app:srcCompat="@drawable/sn_icon"></ImageView>
 
                     <TextView
                         android:layout_width="match_parent"
