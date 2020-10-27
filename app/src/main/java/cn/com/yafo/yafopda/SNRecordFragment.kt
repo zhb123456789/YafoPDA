@@ -62,8 +62,7 @@ class SNRecordFragment : Fragment() {
             {
                 200 ->{
                     try {
-                        textViewOrderCode.text=textViewOrderCode.text.toString() +"\n"+ msg.obj.toString()
-
+                        textViewOrderCode.text= msg.obj.toString() + "\n"+ textViewOrderCode.text.toString()
 
                         countLable.text="序列号数量："+getKeyTime(textViewOrderCode.text.toString(),"\n").toString()
                         Toast.makeText(context, "提交成功", Toast.LENGTH_LONG).show()
