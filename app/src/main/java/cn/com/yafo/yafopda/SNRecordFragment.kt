@@ -16,10 +16,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import cn.com.yafo.yafopda.helper.BeeAndVibrateManager
 import cn.com.yafo.yafopda.helper.ClientBuilder
 import cn.com.yafo.yafopda.helper.GlobalVar
 import cn.com.yafo.yafopda.helper.Loading
-import kotlinx.android.synthetic.main.operation_fragment.textViewOrder
 import kotlinx.android.synthetic.main.sn_record_fragment.*
 import kotlinx.android.synthetic.main.sn_record_fragment.view.*
 import okhttp3.Call
@@ -62,7 +62,10 @@ class SNRecordFragment : Fragment() {
             {
                 200 ->{
                     try {
-                        textViewOrder.text=textViewOrder.text.toString() +"\n"+ msg.obj.toString()
+                        textViewOrderCode.text=textViewOrderCode.text.toString() +"\n"+ msg.obj.toString()
+
+
+                        countLable.text="序列号数量："+getKeyTime(textViewOrderCode.text.toString(),"\n").toString()
                         Toast.makeText(context, "提交成功", Toast.LENGTH_LONG).show()
                         mLoading.dismiss()
 
@@ -127,7 +130,13 @@ class SNRecordFragment : Fragment() {
             var scanStatus= intent?.getStringExtra("SCAN_STATE");
             if("ok" == scanStatus){
                 intent?.let {
-                    submitSNRecord( intent.getStringExtra("SCAN_BARCODE1"))
+                    var sncode=intent.getStringExtra("SCAN_BARCODE1")
+                    if(textViewOrderCode.text.toString().contains(sncode)) {
+                        Toast.makeText(context, "已经扫描过该序列号", Toast.LENGTH_LONG).show()
+                        BeeAndVibrateManager.playBeeAndVibrate(context, R.raw.warning, 100, null)
+                    }
+                    else
+                    submitSNRecord( sncode)
                 }
             }else{
                 val t =
@@ -210,6 +219,21 @@ class SNRecordFragment : Fragment() {
         // 注册广播：
         requireActivity().registerReceiver(receiver,  IntentFilter("nlscan.action.SCANNER_RESULT"));
     }
+
+    fun getKeyTime(str: String, key: String): Int {
+        var index = 0 //定义变量。记录每一次找到的key的位置。
+        var count = 0 //定义变量，记录出现的次数。
+
+        //定义循环。只要索引到的位置不是-1，继续查找。
+        while (str.indexOf(key, index).also { index = it } != -1) {
+            //每循环一次，就要明确下一次查找的起始位置。
+            index += key.length
+            //每查找一次，count自增。
+            count++
+        }
+        return count
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of

@@ -51,18 +51,27 @@
                 android:ems="10"
                 android:singleLine="true"
                 android:hint="订单号(必填)"
+                android:paddingTop="@dimen/txt_big_size"
                 />
-
+            <TextView
+                android:id="@+id/countLable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="打印机序列号"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
             <ScrollView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="vertical"
                 android:fadingEdge="vertical">
                 <TextView
-                    android:id="@+id/textViewOrder"
+                    android:id="@+id/textViewOrderCode"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="打印机序列号"
+                    android:text=""
                     android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
