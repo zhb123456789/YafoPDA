@@ -62,7 +62,7 @@ class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int
         //binding.button4.setOnClickListener(new OnBtnClickListener( position));
         binding.snOrderItemLayout.setOnClickListener(OnItemClickListener(position))
         binding.snOrderItemLayout.setOnLongClickListener {
-            data[position].barCode.value?.let { it1 -> checkInvNumByBarcode(it1) }
+              checkInvNumByBarcode(position)
             true
         }
         return binding.root
@@ -91,60 +91,69 @@ class SnOrderAdapter( private val data: MutableList<SnOrderEntryVM>, val po: Int
     fun checkInvNumByBarcode(barcode: String) {
 //todo 如果已经存在 数量录入框，那么直接 确认上一个输入框？
         var invFind = false
+        var num=0
 
         for (i in data.indices) {
             val vm = data[i]
-            if (vm.barCode.value.toString() == barcode) {
+            if (vm.barCode.value.toString() == barcode  ) {
+                if (vm.remainNum.value!! > 0) {
+                    num += vm.remainNum.value!!
+                    checkInvNumByBarcode(i)
+                }
                 invFind = true
-                if (vm.remainNum.value!! <= 0) {
-                    Toast.makeText(context, "该存货已经检查完，剩余数量0", Toast.LENGTH_LONG).show()
-                    BeeAndVibrateManager.playBeeAndVibrate(context, R.raw.warning, 200, null)
-                    break;
-                }
-                var builder =AlertDialog.Builder(context)
-                // 设置“确定”按钮,使用DialogInterface.OnClickListener接口参数
-                var dialogView = LayoutInflater.from(context)
-                    .inflate(R.layout.one_input_dialog, null);
-                builder.setPositiveButton("确定", DialogInterface.OnClickListener { dialog, _ ->
-                    Log.d("Dialog", "点击了“确认”按钮")
-                    if(doCheckBox(dialogView, vm)){
-                        closeDialog(dialog );
-                    }else{
-                        keepDialog(dialog);
-                    }
-                })
-
-                val dialog = builder.create()
-
-
-
-
-                dialogView.edit_text.inputType = InputType.TYPE_CLASS_NUMBER;
-
-
-                dialog.setTitle("请输入数量");
-                dialog.setView(dialogView);
-                // dialog.setIcon(R.drawable.dictation2_64);
-                dialog.setMessage(vm.invName.value)
-                dialogView.edit_text.setText("1")
-                Selection.selectAll(dialogView.edit_text.text);
-
-                dialogView.edit_text.setOnKeyListener { _, keyCode, event ->
-                    if (KeyEvent.KEYCODE_ENTER == keyCode && event.action == KeyEvent.ACTION_DOWN) {
-                        dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick()
-                    }
-                    false
-                }
-                dialog.show()
-
-                break
             }
+        }
+        if (invFind && num <= 0) {
+            Toast.makeText(context, "该存货已经检查完，剩余数量0", Toast.LENGTH_LONG).show()
+            BeeAndVibrateManager.playBeeAndVibrate(context, R.raw.warning, 200, null)
         }
         if (!invFind) {
             Toast.makeText(context, "无此条码", Toast.LENGTH_LONG).show()
             BeeAndVibrateManager.playBeeAndVibrate(context, R.raw.notexists, 500, null)
         }
     }
+    fun checkInvNumByBarcode(position: Int) {
+
+        val vm = data[position]
+        if (vm.remainNum.value!! <= 0) {
+            Toast.makeText(context, "该存货已经检查完，剩余数量0", Toast.LENGTH_LONG).show()
+            BeeAndVibrateManager.playBeeAndVibrate(context, R.raw.warning, 200, null)
+        }
+        var builder =AlertDialog.Builder(context)
+        // 设置“确定”按钮,使用DialogInterface.OnClickListener接口参数
+        var dialogView = LayoutInflater.from(context)
+            .inflate(R.layout.one_input_dialog, null);
+        builder.setPositiveButton("确定", DialogInterface.OnClickListener { dialog, _ ->
+            Log.d("Dialog", "点击了“确认”按钮")
+            if(doCheckBox(dialogView, vm)){
+                closeDialog(dialog );
+            }else{
+                keepDialog(dialog);
+            }
+        })
+
+        val dialog = builder.create()
+        dialogView.edit_text.inputType = InputType.TYPE_CLASS_NUMBER;
+
+
+        dialog.setTitle("请输入数量");
+        dialog.setView(dialogView);
+        // dialog.setIcon(R.drawable.dictation2_64);
+        dialog.setMessage(vm.invName.value)
+        dialogView.edit_text.setText("1")
+        Selection.selectAll(dialogView.edit_text.text);
+
+        dialogView.edit_text.setOnKeyListener { _, keyCode, event ->
+            if (KeyEvent.KEYCODE_ENTER == keyCode && event.action == KeyEvent.ACTION_DOWN) {
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick()
+            }
+            false
+        }
+        dialog.show()
+
+
+    }
+
 
 
     private fun doCheckBox(dialogView: View, vm: SnOrderEntryVM):Boolean {

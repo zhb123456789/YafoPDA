@@ -114,8 +114,8 @@
 
                         <TextView
                             android:id="@+id/note"
-                            android:layout_width="wrap_content"
-                            android:layout_height="24dp"
+                            android:layout_width="240dp"
+                            android:layout_height="wrap_content"
                             android:text="@{`备注：`+order.note}"
                             android:textColor="#333"
                             android:textSize="14sp" />
